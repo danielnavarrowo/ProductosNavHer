@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/drawable_barcode.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/drawable/barcode.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/xml_data_extraction_rules.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/xml_backup_rules.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.navher.myapplication.app-release-72:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.navher.myapplication.app-main-73:/mipmap-hdpi/ic_launcher_round.webp"
+    }
+]

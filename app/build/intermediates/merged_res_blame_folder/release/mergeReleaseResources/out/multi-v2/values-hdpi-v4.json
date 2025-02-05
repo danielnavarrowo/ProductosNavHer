@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-70:/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\2998dfb53d975fb1e8c3b10d57dfe79c\\transformed\\appcompat-1.7.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                }
+            ]
+        }
+    ]
+}
