@@ -1,11 +1,11 @@
 # Lista de Productos
 
+![Banner](https://raw.githubusercontent.com/danielnavarrowo/ProductosNavHer/refs/heads/master/app/images/banner.webp)
+
 Aplicación móvil para Android que muestra el catálogo de productos de la dulcería "NavHer", con escaner de código de barras incluido.
 Hecha en base a [Material 3](https://m3.material.io/), la última especificación de Material Design de Google.
 
-## Screenshots
 
-![Banner]()
 
 ## Abre este proyecto:
 
