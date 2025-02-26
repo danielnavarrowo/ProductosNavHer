@@ -33,6 +33,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,13 +54,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.DataService
 import com.navher.myapplication.utils.Products
 import com.navher.myapplication.utils.formatDateToSpanish
 import kotlin.math.roundToInt
+
 
 object MainActivityScreen {
 
@@ -81,6 +82,7 @@ object MainActivityScreen {
         }
     }
 
+
     @Composable
     fun ColumnScope.LastUpdate (dataService: DataService) {
         Box(
@@ -94,14 +96,15 @@ object MainActivityScreen {
                     color = MaterialTheme.colorScheme.secondary, // Set the color of the border
                     shape = RoundedCornerShape(6.dp) // Match the same shape as the Box
                 )
-                .padding(horizontal = 6.dp)
+                .padding(horizontal = 6.dp, vertical = 2.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
                 text = "Última actualización: " + formatDateToSpanish(dataService.serverUpdate),
-                fontSize = 12.sp,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
+
             )
         }
     }
@@ -134,12 +137,7 @@ object MainActivityScreen {
                         }
                     }
                 },
-                textStyle = androidx.compose.ui.text.TextStyle(
-                    fontSize = 22.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                ),
+                textStyle = MaterialTheme.typography.bodyMedium.copy( color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
@@ -174,6 +172,7 @@ object MainActivityScreen {
             placeholder = {
                 Text(
                     "Buscar productos",
+                    style = MaterialTheme.typography.bodyLarge,
                 )
             },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
@@ -201,10 +200,14 @@ object MainActivityScreen {
     }
 
     @Composable
-    fun ProductCard(product: Products) {
+    fun ProductCard(product: Products, forceExpanded: Boolean = false) {
         var isExpanded by remember { mutableStateOf(false) }
         var multiplier by remember { mutableIntStateOf(1) }
         val focusManager = LocalFocusManager.current
+
+        LaunchedEffect(forceExpanded) {
+            isExpanded = forceExpanded
+        }
 
         Box(
             modifier = Modifier
@@ -234,7 +237,7 @@ object MainActivityScreen {
                     Text(
                         text = product.descripcion,
                         Modifier.weight(3.2f),
-                        fontSize = 16.sp,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Start
                     )
@@ -242,7 +245,7 @@ object MainActivityScreen {
                         text = "$${product.pventa}0",
                         Modifier.weight(1f),
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.End
                     )
@@ -262,7 +265,7 @@ object MainActivityScreen {
                             ) {
                                 Text(
                                     text = "Costo:\n$${String.format("%.2f", product.pcosto * multiplier)}",
-                                    fontSize = 18.sp,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.width(120.dp)
@@ -271,7 +274,7 @@ object MainActivityScreen {
                                 Text(
                                     text = "Venta:\n$${String.format("%.2f", product.pventa * multiplier)}",
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.width(120.dp)
@@ -279,7 +282,7 @@ object MainActivityScreen {
                                 )
                                 Text(
                                     text = "Mayoreo:\n$${String.format("%.2f", product.mayoreo * multiplier)}",
-                                    fontSize = 18.sp,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.width(120.dp)

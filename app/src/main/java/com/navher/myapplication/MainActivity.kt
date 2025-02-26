@@ -117,6 +117,10 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val shouldAutoExpand = remember(filteredProducts) {
+            filteredProducts.size <= 3
+        }
+
         Box(modifier = Modifier.fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding()
@@ -150,8 +154,9 @@ class MainActivity : ComponentActivity() {
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(3.dp)
                     ) {
-                        items(filteredProducts.take(100)) { product ->
-                            ProductCard(product = product)
+                        items(filteredProducts.take(50)) { product ->
+                            ProductCard(product = product,
+                                forceExpanded = shouldAutoExpand)
                         }
                     }
                 }

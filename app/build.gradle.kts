@@ -21,7 +21,7 @@ android {
         buildConfigField("String", "SUPABASE_KEY", "\"${localProperties.getProperty("SUPABASE_KEY")}\"")
 
         applicationId = "com.navher.productos"
-        minSdk = 31
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.play.services.base)
     implementation(libs.play.services.tflite.java)
+    implementation(libs.androidx.ui.text.google.fonts)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

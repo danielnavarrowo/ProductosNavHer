@@ -2,12 +2,12 @@
     name="release"
     useSupportLibraryVectorDrawables="true"
     package="com.navher.myapplication"
-    minSdkVersion="31"
+    minSdkVersion="28"
     targetSdkVersion="35"
     mergedManifest="build\intermediates\merged_manifest\release\processReleaseMainManifest\AndroidManifest.xml"
     proguardFiles="build\intermediates\default_proguard_files\global\proguard-android-optimize.txt-8.9.0-rc02;proguard-rules.pro"
     partialResultsDir="build\intermediates\lint_vital_partial_results\release\lintVitalAnalyzeRelease\out"
-    desugaredMethodsFiles="C:\Users\danie\.gradle\caches\8.11.1\transforms\dd9789a6b8d8fabdf9ca6132faa9cc24\transformed\D8BackportedDesugaredMethods.txt">
+    desugaredMethodsFiles="C:\Users\danie\.gradle\caches\8.11.1\transforms\ed394d0515b6a502f0ca07c8175e5602\transformed\D8BackportedDesugaredMethods.txt">
   <buildFeatures
       namespacing="REQUIRED"/>
   <sourceProviders>
@@ -27,6 +27,6 @@
       applicationId="com.navher.productos"
       generatedSourceFolders="build\generated\ap_generated_sources\release\out;build\generated\source\buildConfig\release"
       generatedResourceFolders="build\generated\res\resValues\release"
-      desugaredMethodsFiles="C:\Users\danie\.gradle\caches\8.11.1\transforms\dd9789a6b8d8fabdf9ca6132faa9cc24\transformed\D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="C:\Users\danie\.gradle\caches\8.11.1\transforms\ed394d0515b6a502f0ca07c8175e5602\transformed\D8BackportedDesugaredMethods.txt">
   </artifact>
 </variant>

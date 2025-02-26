@@ -1,4 +1,4 @@
-#Tue Feb 25 18:28:01 CST 2025
+#Wed Feb 26 16:42:19 CST 2025
 base.0=C\:\\Users\\danie\\AndroidStudioProjects\\MyApplication3\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
 base.1=C\:\\Users\\danie\\AndroidStudioProjects\\MyApplication3\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes2.dex
 base.2=C\:\\Users\\danie\\AndroidStudioProjects\\MyApplication3\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes3.dex

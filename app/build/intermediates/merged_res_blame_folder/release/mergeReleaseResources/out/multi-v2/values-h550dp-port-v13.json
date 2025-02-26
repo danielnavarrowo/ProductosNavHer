@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-68:/values-h550dp-port-v13/values-h550dp-port-v13.xml",
+            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-70:/values-h550dp-port-v13/values-h550dp-port-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\f4f00a6cb2178e5961c5dc1871e2f6b3\\transformed\\material-1.12.0\\res\\values-h550dp-port-v13\\values-h550dp-port-v13.xml",
+                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\ed5dbea9b1416fc379c650a51ad30417\\transformed\\material-1.12.0\\res\\values-h550dp-port-v13\\values-h550dp-port-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
