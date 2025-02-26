@@ -20,9 +20,22 @@ object BarcodeScanner {
             Barcode.FORMAT_ITF,
         )
         .build()
+
     lateinit var scanner: GmsBarcodeScanner
+    var initialized = false
 
     fun initialize(context: Context) {
         scanner = GmsBarcodeScanning.getClient(context, options)
+        initialized = true
+    }
+
+    fun startScan(onQueryChange: (String) -> Unit) {
+//        if (!initialized) return
+
+        scanner.startScan()
+            .addOnSuccessListener { barcode ->
+                val rawValue: String? = barcode.rawValue?.trimStart('0')
+                onQueryChange(rawValue ?: "")
+            }
     }
 }

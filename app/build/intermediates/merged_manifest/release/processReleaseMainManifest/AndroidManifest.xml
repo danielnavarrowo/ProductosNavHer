@@ -10,24 +10,20 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <permission
         android:name="com.navher.productos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.navher.productos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-    <uses-permission android:name="android.permission.REORDER_TASKS" />
-
-    <queries>
-        <package android:name="androidx.test.orchestrator" />
-        <package android:name="androidx.test.services" />
-        <package android:name="com.google.android.apps.common.testing.services" />
-    </queries>
 
     <application
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:extractNativeLibs="false"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -36,6 +32,21 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.MyApplication" >
+        <service
+            android:name="com.navher.myapplication.services.TileService"
+            android:exported="true"
+            android:icon="@drawable/barcode"
+            android:label="Escanear código"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="false" />
+        </service>
+
         <activity
             android:name="com.navher.myapplication.MainActivity"
             android:exported="true"
@@ -117,31 +128,6 @@
                 android:name="com.russhwolf.settings.SettingsInitializer"
                 android:value="androidx.startup" />
         </provider>
-
-        <activity
-            android:name="androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
-            android:exported="true"
-            android:theme="@style/WhiteBackgroundTheme" >
-            <intent-filter android:priority="-100" >
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity"
-            android:exported="true"
-            android:theme="@style/WhiteBackgroundTheme" >
-            <intent-filter android:priority="-100" >
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity"
-            android:exported="true"
-            android:theme="@style/WhiteBackgroundDialogTheme" >
-            <intent-filter android:priority="-100" >
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <service
             android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"

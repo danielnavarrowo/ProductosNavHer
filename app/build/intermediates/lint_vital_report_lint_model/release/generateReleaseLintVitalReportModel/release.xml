@@ -6,7 +6,7 @@
     targetSdkVersion="35"
     mergedManifest="build\intermediates\merged_manifest\release\processReleaseMainManifest\AndroidManifest.xml"
     manifestMergeReport="build\outputs\logs\manifest-merger-release-report.txt"
-    proguardFiles="build\intermediates\default_proguard_files\global\proguard-android-optimize.txt-8.8.0;proguard-rules.pro"
+    proguardFiles="build\intermediates\default_proguard_files\global\proguard-android-optimize.txt-8.9.0-rc02;proguard-rules.pro"
     partialResultsDir="build\intermediates\lint_vital_partial_results\release\lintVitalAnalyzeRelease\out">
   <buildFeatures
       namespacing="REQUIRED"/>
@@ -27,6 +27,6 @@
       applicationId="com.navher.productos"
       generatedSourceFolders="build\generated\ap_generated_sources\release\out;build\generated\source\buildConfig\release"
       generatedResourceFolders="build\generated\res\resValues\release"
-      desugaredMethodsFiles="C:\Users\danie\.gradle\caches\8.11.1\transforms\7077a6fd6f737f531e20d015376d52ce\transformed\D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="C:\Users\danie\.gradle\caches\8.11.1\transforms\dd9789a6b8d8fabdf9ca6132faa9cc24\transformed\D8BackportedDesugaredMethods.txt">
   </artifact>
 </variant>

@@ -3576,6 +3576,12 @@ HSPLandroidx/compose/foundation/text/selection/TextFieldSelectionManager;->**(**
 # Include all of foundation
 Landroidx/compose/foundation/**;
 
+# Baseline profile rules for androidx.compose.ui.unit
+# =============================================
+# everything in unit is relatively small and in the hot path, so we just add everything
+HSPLandroidx/compose/ui/unit/**->**(**)**
+Landroidx/compose/ui/unit/**
+
 # Baseline profile rules for androidx.compose.ui.geometry
 # =============================================
 # All of geometry is highly used, small, and mathy, so we include everything
@@ -3585,12 +3591,6 @@ Landroidx/compose/ui/geometry/*;
 # =============================================
 HSPLandroidx/compose/ui/util/MathHelpersKt;->lerp(FFF)F
 Landroidx/compose/ui/util/MathHelpersKt;
-
-# Baseline profile rules for androidx.compose.ui.unit
-# =============================================
-# everything in unit is relatively small and in the hot path, so we just add everything
-HSPLandroidx/compose/ui/unit/**->**(**)**
-Landroidx/compose/ui/unit/**
 
 # Baseline profile rules for androidx.compose.ui.text
 # =============================================

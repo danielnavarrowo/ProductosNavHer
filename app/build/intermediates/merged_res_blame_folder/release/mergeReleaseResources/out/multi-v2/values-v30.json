@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-70:/values-v30/values-v30.xml",
+            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-68:/values-v30/values-v30.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\22d737ff7bbde41246eca86d43eda388\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\1420977770ff91baf45d43ab840ea182\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

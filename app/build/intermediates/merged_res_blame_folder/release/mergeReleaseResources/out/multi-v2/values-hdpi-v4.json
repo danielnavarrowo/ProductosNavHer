@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-70:/values-hdpi-v4/values-hdpi-v4.xml",
+            "outputFile": "com.navher.myapplication.app-mergeReleaseResources-68:/values-hdpi-v4/values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\2998dfb53d975fb1e8c3b10d57dfe79c\\transformed\\appcompat-1.7.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "source": "C:\\Users\\danie\\.gradle\\caches\\8.11.1\\transforms\\cb53f02c5a3f4bcba2e779a7a1c0a9d2\\transformed\\appcompat-1.7.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

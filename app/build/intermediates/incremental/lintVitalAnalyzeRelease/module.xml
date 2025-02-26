@@ -4,7 +4,7 @@
     name=":app"
     type="APP"
     maven="My Application:app:unspecified"
-    agpVersion="8.8.0"
+    agpVersion="8.9.0-rc02"
     buildFolder="build"
     bootClassPath="C:\Users\danie\AppData\Local\Android\Sdk\platforms\android-35\android.jar;C:\Users\danie\AppData\Local\Android\Sdk\build-tools\35.0.0\core-lambda-stubs.jar"
     javaSourceLevel="1.8"

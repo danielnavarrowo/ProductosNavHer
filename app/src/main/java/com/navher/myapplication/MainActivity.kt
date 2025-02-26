@@ -44,6 +44,7 @@ import com.navher.myapplication.ui.screens.MainActivityScreen.ScannerButton
 import com.navher.myapplication.ui.screens.MainActivityScreen.SearchBar
 import com.navher.myapplication.ui.theme.MyApplicationTheme
 import com.navher.myapplication.utils.BarcodeScanner
+import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.DataService
 import com.navher.myapplication.utils.ModuleInstallManager
 import com.navher.myapplication.utils.ModuleInstallManager.moduleInstallClient
@@ -61,10 +62,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+
         // Initialize DataStore
         dataService = DataService(context = this)
         ModuleInstallManager.initialize(this)
         BarcodeScanner.initialize(this)
+
+        // Comprobar si se inició desde el Quick Settings Tile
+        if (intent.getBooleanExtra("START_SCANNER", false)) {
+            // Iniciar el escáner directamente
+            startScan(onQueryChange = { searchQuery = it })
+        }
 
         setContent {
             MyApplicationTheme {
@@ -75,6 +83,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
     @Composable
     fun ProductsList(searchQuery: String, onQueryChange: (String) -> Unit) {

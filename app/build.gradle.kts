@@ -58,7 +58,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "META-INF/androidx.test.core.app.InstrumentationActivityInvoker"
         }
     }
 }
@@ -76,7 +75,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.datastore.core.android)
-    implementation(libs.androidx.ui.test.android)
+
     implementation(libs.androidx.foundation.android)
     implementation(libs.play.services.base)
     implementation(libs.play.services.tflite.java)
@@ -86,6 +85,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.android)
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
@@ -104,3 +104,4 @@ dependencies {
 
 
 }
+
