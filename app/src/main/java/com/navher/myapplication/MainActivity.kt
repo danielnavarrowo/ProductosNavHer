@@ -1,4 +1,5 @@
 package com.navher.myapplication
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -68,11 +69,7 @@ class MainActivity : ComponentActivity() {
         ModuleInstallManager.initialize(this)
         BarcodeScanner.initialize(this)
 
-        // Comprobar si se inició desde el Quick Settings Tile
-        if (intent.getBooleanExtra("START_SCANNER", false)) {
-            // Iniciar el escáner directamente
-            startScan(onQueryChange = { searchQuery = it })
-        }
+        handleIntent(intent)
 
         setContent {
             MyApplicationTheme {
@@ -81,6 +78,21 @@ class MainActivity : ComponentActivity() {
                     onQueryChange = { searchQuery = it }
                 )
             }
+        }
+        moduleInstallClient.installModules(moduleInstallRequest)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // Handle the new intent (e.g., when the activity is already running)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        // Check if we need to start the scanner (from QS Tile or any other source)
+        if (intent.getBooleanExtra("START_SCANNER", false)) {
+            // Start the scanner directly
+            startScan(onQueryChange = { searchQuery = it })
         }
     }
 
@@ -104,7 +116,7 @@ class MainActivity : ComponentActivity() {
             }
             return
         }
-        moduleInstallClient.installModules(moduleInstallRequest)
+
 
         val filteredProducts = remember(searchQuery, productsList) {
             if (searchQuery.isEmpty()) {
