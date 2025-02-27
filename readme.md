@@ -10,12 +10,12 @@ Hecha en base a [Material 3](https://m3.material.io/), la última especificació
 ## Abre este proyecto:
 
 1. Clona este repositorio en Android Studio.
-2. Crea un archivo local.properties en la raíz del proyecto y define el *URL* y la *SecretKey* de la conexión con Supabase, asegúrate de que el nombre de las variables coincida con las utilzadas en utils/DataService.kt.
+2. Crea un archivo local.properties en la raíz del proyecto y define el *URL* y la *SecretKey* de la conexión con Supabase, asegúrate de que el nombre de las variables coincida con las definidas en el archivo *build.gradle:app*.
 3. Construye el proyecto (*Assemble Run Configuration*) y ahora el proyecto está listo.
 
 ## Requerimientos
 
-- Android 12 (API 31) o más reciente.
+- Android 9 (API 28) o más reciente.
 - Google Play Services para el escaner de códigos de barras.
 
 ## Hecho con
