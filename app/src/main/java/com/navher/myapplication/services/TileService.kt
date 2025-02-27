@@ -8,8 +8,8 @@ import android.service.quicksettings.TileService
 import com.navher.myapplication.MainActivity
 import com.navher.myapplication.utils.BarcodeScanner
 
+@Suppress("DEPRECATION")
 class TileService : TileService() {
-
 
     @SuppressLint("StartActivityAndCollapseDeprecated")
     override fun onClick() {
@@ -35,14 +35,6 @@ class TileService : TileService() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Si la app está bloqueada, necesitamos usar unlockAndRun
-//        if (isLocked) {
-//            unlockAndRun {
-//                startActivityAndCollapse(pendingIntent)
-//            }
-//        } else {
-//            startActivityAndCollapse(pendingIntent)
-//        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startActivityAndCollapse(pendingIntent)
         } else {

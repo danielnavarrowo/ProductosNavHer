@@ -21,7 +21,7 @@ object BarcodeScanner {
         )
         .build()
 
-    lateinit var scanner: GmsBarcodeScanner
+    private lateinit var scanner: GmsBarcodeScanner
     var initialized = false
 
     fun initialize(context: Context) {

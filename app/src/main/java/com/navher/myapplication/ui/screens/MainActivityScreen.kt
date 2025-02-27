@@ -1,5 +1,6 @@
 package com.navher.myapplication.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -137,7 +138,7 @@ object MainActivityScreen {
                         }
                     }
                 },
-                textStyle = MaterialTheme.typography.bodyMedium.copy( color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, ),
+                textStyle = MaterialTheme.typography.bodyMedium.copy( color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
@@ -199,6 +200,7 @@ object MainActivityScreen {
         )
     }
 
+    @SuppressLint("DefaultLocale")
     @Composable
     fun ProductCard(product: Products, forceExpanded: Boolean = false) {
         var isExpanded by remember { mutableStateOf(false) }
