@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Checador de precios</string>
     <string name="title_activity_main">Checador de precios</string>
+    <string name="bluewp">Blue</string>
+    <string name="pinkwp">Pink</string>
+    <string name="greenwp">Green</string>
+    <string name="orangewp">Orange</string>
 </resources>
