@@ -175,7 +175,9 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         placeholder = {
             Text(
                 "Buscar productos",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                ),
             )
         },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },

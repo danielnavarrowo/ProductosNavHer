@@ -1,64 +1,90 @@
 package com.navher.myapplication.ui.screens
 
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.twotone.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.navher.myapplication.R
+
 
 @Composable
 fun SettingsScreen(navController: NavController) {
 
-    Box(modifier = Modifier
+    Box(modifier = Modifier.fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
         .statusBarsPadding()
         .navigationBarsPadding()
+
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(modifier = Modifier.height(IntrinsicSize.Min)) {
                 IconButton(modifier = Modifier.fillMaxHeight().padding(end = 8.dp),
-                    onClick = { navController.popBackStack() }) {
-                    Icon( Icons.AutoMirrored.TwoTone.ArrowBack, contentDescription = "Back", Modifier.fillMaxSize())
+                    onClick = { navController.popBackStack()}) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, tint = MaterialTheme.colorScheme.onBackground, contentDescription = "Back")
                 }
-                Text("Ajustes", style = MaterialTheme.typography.displayMedium, )
+                Text("Ajustes", style = MaterialTheme.typography.displaySmall,fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onBackground)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            Text("Actualizaciones automáticas", style = MaterialTheme.typography.titleMedium)
+            //Ajuste para activar y desactivar las actualizaciones automáticas al lanzar MainActivity
+            Row(modifier = Modifier.fillMaxWidth().clickable {
+
+            }.background(MaterialTheme.colorScheme.surfaceContainer)
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                Column (modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                    Text("Actualizaciones automáticas",
+                        style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text("Al iniciar la aplicación, verificar si hay actualizaciones.",
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Light
+                    )
+                }
+                Switch(
+                    checked = true,
+                    onCheckedChange = { /*TODO*/ },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surface
+                    )
+
+                )
+            }
+
         }
     }
 }

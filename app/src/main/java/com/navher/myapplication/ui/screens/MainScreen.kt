@@ -1,5 +1,6 @@
 package com.navher.myapplication.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -81,6 +82,7 @@ fun MainScreen(dataService: DataService, searchQuery:String, onQueryChange: (Str
     }
 
     Box(modifier = Modifier.fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
         .statusBarsPadding()
         .navigationBarsPadding()
         .padding(horizontal = 16.dp, vertical = 4.dp)
