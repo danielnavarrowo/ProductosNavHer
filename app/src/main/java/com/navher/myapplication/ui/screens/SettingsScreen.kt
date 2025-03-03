@@ -18,20 +18,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.twotone.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
@@ -39,36 +35,61 @@ import androidx.navigation.NavController
 @Composable
 fun SettingsScreen(navController: NavController) {
 
-    Box(modifier = Modifier.fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
-        .statusBarsPadding()
-        .navigationBarsPadding()
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .navigationBarsPadding()
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(modifier = Modifier.height(IntrinsicSize.Min)) {
-                IconButton(modifier = Modifier.fillMaxHeight().padding(end = 8.dp),
-                    onClick = { navController.popBackStack()}) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, tint = MaterialTheme.colorScheme.onBackground, contentDescription = "Back")
+                IconButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(end = 8.dp),
+                    onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = "Back"
+                    )
                 }
-                Text("Ajustes", style = MaterialTheme.typography.displaySmall,fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onBackground)
+                Text(
+                    "Ajustes",
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             //Ajuste para activar y desactivar las actualizaciones automáticas al lanzar MainActivity
-            Row(modifier = Modifier.fillMaxWidth().clickable {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
 
-            }.background(MaterialTheme.colorScheme.surfaceContainer)
-                ,
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically) {
-                Column (modifier = Modifier.weight(1f).padding(end = 12.dp)) {
-                    Text("Actualizaciones automáticas",
-                        style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        "Actualizaciones automáticas",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-                    Text("Al iniciar la aplicación, verificar si hay actualizaciones.",
-                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onBackground,
+                    Text(
+                        "TODO\nAl iniciar la aplicación, verificar si hay actualizaciones. ",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Light
                     )
                 }

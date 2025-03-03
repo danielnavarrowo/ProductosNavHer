@@ -37,6 +37,7 @@ class DataService(private val context: Context) {
         install(Postgrest)
     }
 
+
     //Function to check if there is any data in the cache, and return it if it up to date.
     //If not, it will fetch the data from the API and save it to the cache.
     suspend fun getProductsList(): List<Products> {
@@ -51,10 +52,7 @@ class DataService(private val context: Context) {
         if ( cachedProducts.isNotEmpty()
             && serverUpdate <= cachedDate
             && cachedDate != LocalDate.parse("1969-12-12")
-            )
-            {
-                return cachedProducts
-            }
+            ) return cachedProducts
         else {
                 val fetchedProducts = fetchProducts()
                 saveProductsList(fetchedProducts, serverUpdate)
@@ -87,7 +85,6 @@ class DataService(private val context: Context) {
 
     // Get products list from cache
     private suspend fun getCachedProductsList(): List<Products> {
-        println("checking cache products")
         return context.dataStore.data.map { preferences ->
             val productsJson = preferences[PRODUCTS_KEY] ?: "[]"
             Json.decodeFromString<List<Products>>(productsJson)

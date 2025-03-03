@@ -67,7 +67,8 @@ import kotlin.math.roundToInt
 @Composable
 fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
     IconButton(
-        modifier = Modifier.weight(.16f)
+        modifier = Modifier
+            .weight(.16f)
             .align(Alignment.CenterVertically)
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.inversePrimary, RoundedCornerShape(16.dp)),
@@ -78,13 +79,17 @@ fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
             contentColor = MaterialTheme.colorScheme.secondary
         )
     ) {
-        Icon(modifier = Modifier.padding(12.dp), painter = painterResource(id = R.drawable.barcode), contentDescription = "Barcode Scanner")
+        Icon(
+            modifier = Modifier.padding(12.dp),
+            painter = painterResource(id = R.drawable.barcode),
+            contentDescription = "Barcode Scanner"
+        )
     }
 }
 
 
 @Composable
-fun ColumnScope.LastUpdate (dataService: DataService, navController: NavController) {
+fun ColumnScope.LastUpdate(dataService: DataService, navController: NavController) {
     Box(
         modifier = Modifier
             .background(
@@ -101,7 +106,7 @@ fun ColumnScope.LastUpdate (dataService: DataService, navController: NavControll
             .clickable { navController.navigate("settings") }
 
 
-        ) {
+    ) {
         Text(
             text = "Última actualización: " + formatDateToSpanish(dataService.serverUpdate),
             style = MaterialTheme.typography.labelSmall,
@@ -119,10 +124,12 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
     val haptic = LocalHapticFeedback.current // Get haptic feedback provider
     var previousStep by remember { mutableIntStateOf(sliderPosition) } // Store the previous step
 
-    Column(modifier = Modifier.background(
-        color = MaterialTheme.colorScheme.inversePrimary,
-        shape = RoundedCornerShape(10.dp),
-    )) {
+    Column(
+        modifier = Modifier.background(
+            color = MaterialTheme.colorScheme.inversePrimary,
+            shape = RoundedCornerShape(10.dp),
+        )
+    ) {
         BasicTextField(
             value = textValue,
             onValueChange = { newValue ->
@@ -140,13 +147,21 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                     }
                 }
             },
-            textStyle = MaterialTheme.typography.bodyMedium.copy( color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
+            textStyle = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
+            ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp)
         )
         Slider(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp).semantics { contentDescription = "Localized Description" },
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .semantics { contentDescription = "Localized Description" },
             value = sliderPosition.toFloat(),
             onValueChange = {
                 sliderPosition = it.roundToInt()
@@ -260,17 +275,25 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
             if (isExpanded) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth().wrapContentSize()
+                        .fillMaxWidth()
+                        .wrapContentSize()
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(10.dp),
                 ) {
                     Column {
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 0.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Costo:\n$${String.format("%.2f", product.pcosto * multiplier)}",
+                                text = "Costo:\n$${
+                                    String.format(
+                                        "%.2f",
+                                        product.pcosto * multiplier
+                                    )
+                                }",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 textAlign = TextAlign.Center,
@@ -278,7 +301,12 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
 
                             )
                             Text(
-                                text = "Venta:\n$${String.format("%.2f", product.pventa * multiplier)}",
+                                text = "Venta:\n$${
+                                    String.format(
+                                        "%.2f",
+                                        product.pventa * multiplier
+                                    )
+                                }",
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -287,7 +315,12 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
 
                             )
                             Text(
-                                text = "Mayoreo:\n$${String.format("%.2f", product.mayoreo * multiplier)}",
+                                text = "Mayoreo:\n$${
+                                    String.format(
+                                        "%.2f",
+                                        product.mayoreo * multiplier
+                                    )
+                                }",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 textAlign = TextAlign.Center,

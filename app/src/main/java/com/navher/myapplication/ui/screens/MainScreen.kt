@@ -24,12 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -37,27 +34,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.navher.myapplication.utils.DataService
-import com.navher.myapplication.utils.Products
+import com.navher.myapplication.ui.components.LastUpdate
 import com.navher.myapplication.ui.components.ProductCard
 import com.navher.myapplication.ui.components.ScannerButton
 import com.navher.myapplication.ui.components.SearchBar
-import com.navher.myapplication.ui.components.LastUpdate
-
-import kotlinx.coroutines.launch
+import com.navher.myapplication.utils.DataService
+import com.navher.myapplication.viewmodels.ProductsViewModel
 
 @Composable
-fun MainScreen(dataService: DataService, searchQuery:String, onQueryChange: (String) -> Unit, navController: NavController) {
-    var productsList by remember { mutableStateOf<List<Products>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
+fun MainScreen(
+    productsViewModel: ProductsViewModel,
+    dataService: DataService,
+    searchQuery: String,
+    onQueryChange: (String) -> Unit,
+    navController: NavController
+) {
+    val productsList by productsViewModel.products.collectAsState()
+    val isLoading by productsViewModel.isLoading.collectAsState()
 
-
-    // Fetch the product list from DataStore
-    LaunchedEffect(Unit) {
-        productsList = dataService.getProductsList()
-        isLoading = false
-    }
     // Loading indicator
     if (isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -67,9 +61,8 @@ fun MainScreen(dataService: DataService, searchQuery:String, onQueryChange: (Str
     }
 
     val filteredProducts = remember(searchQuery, productsList) {
-        if (searchQuery.isEmpty()) {
-            productsList
-        } else {
+        if (searchQuery.isEmpty()) productsList
+         else {
             productsList.filter {
                 it.descripcion.contains(searchQuery, ignoreCase = true) ||
                         it.codigo.contains(searchQuery, ignoreCase = true)
@@ -81,7 +74,8 @@ fun MainScreen(dataService: DataService, searchQuery:String, onQueryChange: (Str
         filteredProducts.size <= 3
     }
 
-    Box(modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier
+        .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
         .statusBarsPadding()
         .navigationBarsPadding()
@@ -102,42 +96,36 @@ fun MainScreen(dataService: DataService, searchQuery:String, onQueryChange: (Str
 
                 ScannerButton(onQueryChange = onQueryChange)
             }
-            // Shows the last update date
+
             LastUpdate(dataService, navController)
 
             if (filteredProducts.isEmpty()) {
                 Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Outlined.Info, contentDescription = "No se encontró el producto.", tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(96.dp).padding(vertical = 20.dp))
                     Text(text = "No se encontró el producto.", color = MaterialTheme.colorScheme.onSurface, fontSize = 24.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
-
                 }
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(3.dp)
                 ) {
                     items(filteredProducts.take(50)) { product ->
-                        ProductCard(product = product,
-                            forceExpanded = shouldAutoExpand)
+                        ProductCard(
+                            product = product,
+                            forceExpanded = shouldAutoExpand
+                        )
                     }
                 }
             }
         }
         FloatingActionButton(
-            onClick = {
-                coroutineScope.launch {
-                    isLoading = true
-                    try {
-                        productsList = dataService.getProductsList()
-                    } finally {
-                        isLoading = false
-                    }
-                }
-            },
-            modifier = Modifier.align(Alignment.BottomEnd).padding(horizontal = 12.dp, vertical = 30.dp),
+            onClick = { productsViewModel.loadProducts() },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(horizontal = 12.dp, vertical = 30.dp),
             containerColor = MaterialTheme.colorScheme.inversePrimary,
             contentColor = MaterialTheme.colorScheme.secondary
         ) {
-            Icon(Icons.Filled.Refresh, "Floating action button.")
+            Icon(Icons.Filled.Refresh, "Refrescar datos")
         }
     }
-    }
+}
