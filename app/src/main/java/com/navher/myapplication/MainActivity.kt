@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -67,7 +68,6 @@ class MainActivity : ComponentActivity() {
             startScan(onQueryChange = { searchQuery = it })
 
     }
-
     @Composable
     fun MyApp() {
         val navController = rememberNavController()

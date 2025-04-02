@@ -1,7 +1,7 @@
 package com.navher.myapplication.ui.components
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -188,12 +189,11 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         modifier = modifier
             .fillMaxWidth(),
         placeholder = {
-            Text(
-                "Buscar productos",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                ),
-            )
+                Text(
+                    text = "Buscar productos",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
         },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
         trailingIcon = {
@@ -215,7 +215,8 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-        )
+        ),
+        textStyle = MaterialTheme.typography.bodySmall,
     )
 }
 
@@ -234,11 +235,9 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.primary)
-            .animateContentSize() // This will animate the size changes smoothly
             .wrapContentSize()
             .pointerInput(Unit) {
                 detectTapGestures(
-
                     onPress = {
                         focusManager.clearFocus()
                     },
@@ -266,74 +265,76 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                     text = "$${product.pventa}0",
                     Modifier.weight(1f),
                     fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.End
                 )
             }
-
-            if (isExpanded) {
-                Box(
+            AnimatedVisibility(isExpanded) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentSize()
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(10.dp),
                 ) {
-                    Column {
-                        Row(
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 6.dp),
+                        // horizontalArrangement = Arrangement.SpaceBetween, // Ya no es necesario con weights
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Costo:\n$${
+                                String.format(
+                                    "%.2f",
+                                    product.pcosto * multiplier // Asegúrate de tener estas variables definidas
+                                )
+                            }",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(.9f) // Asigna peso 1
+                        )
+                        Text(
+                            text = "Venta:\n$${
+                                String.format(
+                                    "%.2f",
+                                    product.pventa * multiplier // Asegúrate de tener estas variables definidas
+                                )
+                            }",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 0.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "Costo:\n$${
-                                    String.format(
-                                        "%.2f",
-                                        product.pcosto * multiplier
-                                    )
-                                }",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.width(120.dp)
-
-                            )
-                            Text(
-                                text = "Venta:\n$${
-                                    String.format(
-                                        "%.2f",
-                                        product.pventa * multiplier
-                                    )
-                                }",
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.width(120.dp)
-
-                            )
-                            Text(
-                                text = "Mayoreo:\n$${
-                                    String.format(
-                                        "%.2f",
-                                        product.mayoreo * multiplier
-                                    )
-                                }",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.width(120.dp)
-
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        StepsSlider(
-                            initialValue = multiplier,
-                            onValueChange = { multiplier = it }
+                                .weight(1f) // Asigna peso 1
+                                .background(
+                                    color = MaterialTheme.colorScheme.surfaceBright,
+                                    shape = RoundedCornerShape(18.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                        Text(
+                            text = "Mayoreo:\n$${
+                                String.format(
+                                    "%.2f",
+                                    product.mayoreo * multiplier // Asegúrate de tener estas variables definidas
+                                )
+                            }",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(.9f) // Asigna peso 1
                         )
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    StepsSlider(
+                        initialValue = multiplier,
+                        onValueChange = { multiplier = it }
+                    )
+
                 }
             }
         }

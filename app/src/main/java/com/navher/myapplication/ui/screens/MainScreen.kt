@@ -62,7 +62,7 @@ fun MainScreen(
 
     val filteredProducts = remember(searchQuery, productsList) {
         if (searchQuery.isEmpty()) productsList
-         else {
+        else {
             productsList.filter {
                 it.descripcion.contains(searchQuery, ignoreCase = true) ||
                         it.codigo.contains(searchQuery, ignoreCase = true)
@@ -74,24 +74,29 @@ fun MainScreen(
         filteredProducts.size <= 3
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
-        .statusBarsPadding()
-        .navigationBarsPadding()
-        .padding(horizontal = 16.dp, vertical = 4.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Row (
-                modifier = Modifier.fillMaxWidth().requiredHeight(56.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .requiredHeight(56.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 SearchBar(
                     query = searchQuery,
                     onQueryChange = onQueryChange,
-                    modifier = Modifier.weight(.84f).fillMaxHeight()
+                    modifier = Modifier
+                        .weight(.84f)
+                        .fillMaxHeight()
                 )
 
                 ScannerButton(onQueryChange = onQueryChange)
@@ -100,9 +105,26 @@ fun MainScreen(
             LastUpdate(dataService, navController)
 
             if (filteredProducts.isEmpty()) {
-                Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Outlined.Info, contentDescription = "No se encontró el producto.", tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(96.dp).padding(vertical = 20.dp))
-                    Text(text = "No se encontró el producto.", color = MaterialTheme.colorScheme.onSurface, fontSize = 24.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        Icons.Outlined.Info,
+                        contentDescription = "No se encontró el producto.",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .size(96.dp)
+                            .padding(vertical = 20.dp)
+                    )
+                    Text(
+                        text = "No se encontró el producto.",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             } else {
                 LazyColumn(
