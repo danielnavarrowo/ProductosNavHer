@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.navher.myapplication.utils.DataService
 import com.navher.myapplication.utils.Products
+import com.navher.myapplication.utils.formatDateToSpanish
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +17,9 @@ class ProductsViewModel(private val dataService: DataService) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _updateDate = MutableStateFlow("")
+    val updateDate: StateFlow<String> = _updateDate.asStateFlow()
+
     init {
         loadProducts()
     }
@@ -25,6 +29,7 @@ class ProductsViewModel(private val dataService: DataService) : ViewModel() {
             _isLoading.value = true
             try {
                 _products.value = dataService.getProductsList()
+                _updateDate.value = formatDateToSpanish(dataService.serverUpdate)
             } finally {
                 _isLoading.value = false
             }

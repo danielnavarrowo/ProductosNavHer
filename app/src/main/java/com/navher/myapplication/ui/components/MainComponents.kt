@@ -14,12 +14,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -51,6 +48,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -60,10 +58,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner.startScan
-import com.navher.myapplication.utils.DataService
 import com.navher.myapplication.utils.Products
-import com.navher.myapplication.utils.formatDateToSpanish
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+
+
+private const val SLIDER_MIN_VALUE = 1
+private const val SLIDER_MAX_VALUE = 200
+private const val SLIDER_VISIBLE_RANGE_MAX = 20f // Rango visible del slider (puede ser diferente al min/max real)
+private const val SLIDER_VISIBLE_STEPS = 19 // Pasos para el rango visible del slider
 
 @Composable
 fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
@@ -83,14 +90,14 @@ fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
         Icon(
             modifier = Modifier.padding(12.dp),
             painter = painterResource(id = R.drawable.barcode),
-            contentDescription = "Barcode Scanner"
+            contentDescription = stringResource(R.string.barcode_scanner_cd)
         )
     }
 }
 
 
 @Composable
-fun ColumnScope.LastUpdate(dataService: DataService, navController: NavController) {
+fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
     Box(
         modifier = Modifier
             .background(
@@ -98,88 +105,185 @@ fun ColumnScope.LastUpdate(dataService: DataService, navController: NavControlle
                 shape = RoundedCornerShape(10.dp)
             )
             .border(
-                width = 1.dp, // Set the thickness of the border
-                color = MaterialTheme.colorScheme.secondary, // Set the color of the border
-                shape = RoundedCornerShape(6.dp) // Match the same shape as the Box
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.secondary,
+                shape = RoundedCornerShape(6.dp)
             )
             .padding(horizontal = 6.dp, vertical = 2.dp)
             .align(Alignment.CenterHorizontally)
             .clickable { navController.navigate("settings") }
-
-
     ) {
         Text(
-            text = "Última actualización: " + formatDateToSpanish(dataService.serverUpdate),
+            text = stringResource(R.string.last_update_prefix, updateDate ),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-
-            )
+        )
     }
 }
 
 @Composable
 fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
-    var sliderPosition by remember { mutableIntStateOf(initialValue) }
+    var sliderPosition by remember { mutableIntStateOf(initialValue.coerceIn(SLIDER_MIN_VALUE, SLIDER_MAX_VALUE)) }
     var textValue by remember { mutableStateOf(sliderPosition.toString()) }
-    val haptic = LocalHapticFeedback.current // Get haptic feedback provider
-    var previousStep by remember { mutableIntStateOf(sliderPosition) } // Store the previous step
+    val haptic = LocalHapticFeedback.current
+    var previousStep by remember { mutableIntStateOf(sliderPosition) }
+
+    fun updateValue(newValue: Int) {
+        sliderPosition = newValue
+        textValue = newValue.toString() // Sincronizar texto
+        onValueChange(newValue) // Notificar al exterior
+    }
+
+
 
     Column(
         modifier = Modifier.background(
             color = MaterialTheme.colorScheme.inversePrimary,
             shape = RoundedCornerShape(10.dp),
-        )
+        ).padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
-        BasicTextField(
-            value = textValue,
-            onValueChange = { newValue ->
-                if (newValue.isEmpty()) {
-                    textValue = ""
-                    sliderPosition = 1
-                    onValueChange(1)
-                } else {
-                    newValue.toIntOrNull()?.let { intValue ->
-                        if (intValue in 1..500) {
-                            textValue = intValue.toString()
-                            sliderPosition = intValue
-                            onValueChange(intValue)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(.7f),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(.2f)
+                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(12.dp))
+                    .border(1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
+                    .padding(vertical = 4.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { offset ->
+                                // Decrementar inmediatamente una vez
+                                if (sliderPosition > 1) {
+                                    updateValue(sliderPosition - 1)
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                }
+                                // Detectar presión continua
+                                val job = CoroutineScope(Dispatchers.Main).launch {
+                                    // Esperar un poco antes de iniciar el decremento rápido
+                                    delay(500)
+                                    while (isActive && sliderPosition > 1) {
+                                        updateValue(sliderPosition - 1)
+                                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                        delay(80) // Controla la velocidad de decremento
+                                    }
+                                }
+                                // Esperar hasta que se levante el dedo o se cancele
+                                tryAwaitRelease()
+                                job.cancel()
+                            }
+                        )
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.minus),
+                    tint = MaterialTheme.colorScheme.primary,
+                    contentDescription = "Menos",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            BasicTextField(
+                value = textValue,
+                onValueChange = { newValue ->
+                    if (newValue.isEmpty()) {
+                        sliderPosition = 1
+                        textValue = ""
+                        onValueChange(1) // Notificar al exterior
+                    }
+
+                    else {
+                        newValue.toIntOrNull()?.let { intValue ->
+                            if (intValue in 1..500) updateValue(intValue)
                         }
                     }
-                }
-            },
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
-            ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 6.dp)
+                },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                modifier = Modifier
+                    .weight(.2f)
+                    .padding(vertical = 6.dp)
+            )
+
+            // Botón de incremento con soporte para presión continua
+            Box(
+                modifier = Modifier
+                    .weight(.2f)
+                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(12.dp))
+                    .border(1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
+                    .padding(vertical = 4.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { offset ->
+                                // Incrementar inmediatamente una vez
+                                if (sliderPosition < 500) {
+                                    updateValue(sliderPosition + 1)
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                }
+
+                                // Detectar presión continua
+                                val job = CoroutineScope(Dispatchers.Main).launch {
+                                    // Esperar un poco antes de iniciar el incremento rápido
+                                    delay(500)
+                                    while (isActive && sliderPosition < 500) {
+                                       updateValue(sliderPosition + 1)
+                                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                        delay(80) // Controla la velocidad de incremento
+                                    }
+                                }
+                                // Esperar hasta que se levante el dedo o se cancele
+                                tryAwaitRelease()
+                                job.cancel()
+                            }
+                        )
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.add),
+                    tint = MaterialTheme.colorScheme.surfaceTint,
+                    contentDescription = "Más",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+        }
+
+        Spacer(
+            modifier = Modifier.height(6.dp)
         )
+
         Slider(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 4.dp)
-                .semantics { contentDescription = "Localized Description" },
+                .semantics { contentDescription = "" },
             value = sliderPosition.toFloat(),
-            onValueChange = {
-                sliderPosition = it.roundToInt()
-                textValue = it.roundToInt().toString()
-                onValueChange(it.roundToInt())
+            onValueChange = { newValueFromSlider ->
+                val roundedValue = newValueFromSlider.roundToInt()
+                updateValue(roundedValue) // Actualiza estado interno y notifica
 
-                val currentStep = sliderPosition // Get the current step
+                // Haptic feedback específico del slider (al cambiar de paso)
+                val currentStep = roundedValue
                 if (currentStep != previousStep) {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove) // Trigger vibration
-                    previousStep = currentStep // Update the previous step
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    previousStep = currentStep
                 }
             },
-            valueRange = 1f..25f,
-            steps = 24
+            valueRange = SLIDER_MIN_VALUE.toFloat()..SLIDER_VISIBLE_RANGE_MAX, // Rango visible
+            steps = SLIDER_VISIBLE_STEPS
         )
     }
 }
+
 
 @Composable
 fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -189,13 +293,13 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         modifier = modifier
             .fillMaxWidth(),
         placeholder = {
-                Text(
-                    text = "Buscar productos",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+            Text(
+                text = stringResource(R.string.search_products_placeholder),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }, // Descripción podría ser stringResource(R.string.search_icon_cd)
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(
@@ -205,7 +309,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
                 ) {
                     Icon(
                         Icons.Default.Clear,
-                        contentDescription = "Limpiar búsqueda",
+                        contentDescription = stringResource(R.string.clear_search_cd),
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -220,16 +324,28 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
     )
 }
 
-@SuppressLint("DefaultLocale")
+
+@SuppressLint("DefaultLocale") // Mantenido por String.format
 @Composable
 fun ProductCard(product: Products, forceExpanded: Boolean = false) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(forceExpanded) } // Inicializar con forceExpanded
     var multiplier by remember { mutableIntStateOf(1) }
     val focusManager = LocalFocusManager.current
 
+    // Ajusta la expansión si forceExpanded cambia externamente
     LaunchedEffect(forceExpanded) {
-        isExpanded = forceExpanded
+        if (isExpanded != forceExpanded) {
+            isExpanded = forceExpanded
+        }
     }
+
+    // Resetea el multiplicador si la tarjeta se colapsa (funcionalidad original mantenida)
+    LaunchedEffect(isExpanded) {
+        if (!isExpanded) {
+            multiplier = 1
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -239,42 +355,48 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
             .pointerInput(Unit) {
                 detectTapGestures(
                     onPress = {
-                        focusManager.clearFocus()
+                        focusManager.clearFocus() // Quita el foco de cualquier campo (como el de StepsSlider)
                     },
                     onTap = {
-                        isExpanded = !isExpanded
+                        isExpanded = !isExpanded // Cambia el estado de expansión al tocar
                     }
                 )
             }
     ) {
         Column {
+            // Fila superior siempre visible
             Row(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth() // Usa fillMaxWidth para consistencia
                     .padding(6.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically // Alinear verticalmente
             ) {
                 Text(
                     text = product.descripcion,
-                    Modifier.weight(3.2f),
+                    modifier = Modifier.weight(3.2f), // Mantenido el peso
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Start,
+                    maxLines = 2, // Evita que textos muy largos descuadren mucho (opcional)
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis // Opcional
                 )
                 Text(
-                    text = "$${product.pventa}0",
-                    Modifier.weight(1f),
+                    text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
+                    modifier = Modifier.weight(1f), // Mantenido el peso
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.End
                 )
             }
+
+            // Contenido expandible
+            // SUGGESTION: Usar AnimatedVisibility para una animación de entrada/salida más suave
             AnimatedVisibility(isExpanded) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentSize()
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(10.dp),
                 ) {
@@ -282,61 +404,63 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 6.dp),
-                        // horizontalArrangement = Arrangement.SpaceBetween, // Ya no es necesario con weights
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Costo:\n$${
-                                String.format(
-                                    "%.2f",
-                                    product.pcosto * multiplier // Asegúrate de tener estas variables definidas
-                                )
-                            }",
-                            style = MaterialTheme.typography.bodyMedium,
+                        PriceText( // SUGGESTION: Composable interno para los textos de precio
+                            label = stringResource(R.string.cost_label), // SUGGESTION: stringResource
+                            value = product.pcosto * multiplier,
+                            modifier = Modifier.weight(.8f),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.weight(.9f) // Asigna peso 1
+                            style = MaterialTheme.typography.bodyMedium
                         )
-                        Text(
-                            text = "Venta:\n$${
-                                String.format(
-                                    "%.2f",
-                                    product.pventa * multiplier // Asegúrate de tener estas variables definidas
-                                )
-                            }",
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center,
+                        PriceText( // SUGGESTION: Composable interno para los textos de precio
+                            label = stringResource(R.string.sale_label), // SUGGESTION: stringResource
+                            value = product.pventa * multiplier,
                             modifier = Modifier
-                                .weight(1f) // Asigna peso 1
-                                .background(
-                                    color = MaterialTheme.colorScheme.surfaceBright,
-                                    shape = RoundedCornerShape(18.dp)
-                                )
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .weight(1f),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer, // Color específico para Venta
+                            style = MaterialTheme.typography.titleMedium, // Estilo específico para Venta
+                            fontWeight = FontWeight.Black // Negrita para Venta
                         )
-                        Text(
-                            text = "Mayoreo:\n$${
-                                String.format(
-                                    "%.2f",
-                                    product.mayoreo * multiplier // Asegúrate de tener estas variables definidas
-                                )
-                            }",
-                            style = MaterialTheme.typography.bodyMedium,
+                        PriceText( // SUGGESTION: Composable interno para los textos de precio
+                            label = stringResource(R.string.wholesale_label), // SUGGESTION: stringResource
+                            value = product.mayoreo * multiplier,
+                            modifier = Modifier.weight(.8f),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.weight(.9f) // Asigna peso 1
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     StepsSlider(
-                        initialValue = multiplier,
-                        onValueChange = { multiplier = it }
+                        initialValue = 1,
+                        onValueChange = { multiplier = it } // Actualiza el multiplicador del ProductCard
                     )
-
                 }
             }
         }
     }
+}
+
+/**
+ * SUGGESTION: Composable interno para mostrar etiqueta y precio formateado.
+ */
+@SuppressLint("DefaultLocale") // Mantenido por String.format
+@Composable
+private fun PriceText(
+    label: String,
+    value: Double,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified, // Usa el color del contexto por defecto
+    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
+    fontWeight: FontWeight? = null
+) {
+    val formattedValue = "$${String.format("%.2f", value)}"
+    Text(
+        text = "$label\n$formattedValue",
+        style = style,
+        color = color,
+        fontWeight = fontWeight,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+    )
 }

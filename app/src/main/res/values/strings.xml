@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">Checador de precios</string>
     <string name="title_activity_main">Checador de precios</string>
+    <!-- ScannerButton -->
+    <string name="barcode_scanner_cd">Escanear código de barras</string>
+
+    <!-- LastUpdate -->
+    <string name="last_update_prefix">Última actualización: %1$s</string>
+
+    <!-- StepsSlider -->
+    <string name="decrease_value_cd">Disminuir valor</string>
+    <string name="increase_value_cd">Aumentar valor</string>
+    <string name="slider_cd">Deslizador de cantidad</string>
+
+    <!-- SearchBar -->
+    <string name="search_products_placeholder">Buscar productos</string>
+    <string name="clear_search_cd">Limpiar búsqueda</string>
+    <string name="search_icon_cd">Buscar</string>
+
+    <!-- ProductCard -->
+    <string name="cost_label">Costo:</string>
+    <string name="sale_label">Venta:</string>
+    <string name="wholesale_label">Mayoreo:</string>
+
 </resources>

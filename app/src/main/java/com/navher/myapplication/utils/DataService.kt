@@ -62,7 +62,6 @@ class DataService(private val context: Context) {
 
     // Fetch products from Supabase
     private suspend fun fetchProducts(): List<Products> {
-        println("Fetching products from Supabase")
         return supabaseClient.from("productos")
             .select(columns = Columns.list("codigo, descripcion, pventa, pcosto, mayoreo"))
             .decodeList<Products>()
@@ -80,7 +79,6 @@ class DataService(private val context: Context) {
             preferences[PRODUCTS_KEY] = Json.encodeToString(products)
             preferences[UPDATE_KEY] = lastUpdate.toString()
         }
-        println("data and date saved to cache")
     }
 
     // Get products list from cache
@@ -93,7 +91,6 @@ class DataService(private val context: Context) {
 
     // Get last update date from cache
     private suspend fun getCachedLastUpdate(): LocalDate {
-        println("checking cache date")
         return context.dataStore.data.map { preferences ->
             LocalDate.parse(preferences[UPDATE_KEY] ?: "1969-12-12")
         }.first()

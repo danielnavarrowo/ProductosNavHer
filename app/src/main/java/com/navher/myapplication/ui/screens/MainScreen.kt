@@ -38,19 +38,19 @@ import com.navher.myapplication.ui.components.LastUpdate
 import com.navher.myapplication.ui.components.ProductCard
 import com.navher.myapplication.ui.components.ScannerButton
 import com.navher.myapplication.ui.components.SearchBar
-import com.navher.myapplication.utils.DataService
 import com.navher.myapplication.viewmodels.ProductsViewModel
 
 @Composable
 fun MainScreen(
     productsViewModel: ProductsViewModel,
-    dataService: DataService,
     searchQuery: String,
     onQueryChange: (String) -> Unit,
     navController: NavController
 ) {
     val productsList by productsViewModel.products.collectAsState()
     val isLoading by productsViewModel.isLoading.collectAsState()
+    val updateDate by productsViewModel.updateDate.collectAsState()
+
 
     // Loading indicator
     if (isLoading) {
@@ -102,7 +102,7 @@ fun MainScreen(
                 ScannerButton(onQueryChange = onQueryChange)
             }
 
-            LastUpdate(dataService, navController)
+            LastUpdate(updateDate, navController)
 
             if (filteredProducts.isEmpty()) {
                 Column(
@@ -144,8 +144,8 @@ fun MainScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(horizontal = 12.dp, vertical = 30.dp),
-            containerColor = MaterialTheme.colorScheme.inversePrimary,
-            contentColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary
         ) {
             Icon(Icons.Filled.Refresh, "Refrescar datos")
         }
