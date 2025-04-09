@@ -7,15 +7,9 @@
     <!-- LastUpdate -->
     <string name="last_update_prefix">Última actualización: %1$s</string>
 
-    <!-- StepsSlider -->
-    <string name="decrease_value_cd">Disminuir valor</string>
-    <string name="increase_value_cd">Aumentar valor</string>
-    <string name="slider_cd">Deslizador de cantidad</string>
-
     <!-- SearchBar -->
     <string name="search_products_placeholder">Buscar productos</string>
     <string name="clear_search_cd">Limpiar búsqueda</string>
-    <string name="search_icon_cd">Buscar</string>
 
     <!-- ProductCard -->
     <string name="cost_label">Costo:</string>

@@ -153,8 +153,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
             Box(
                 modifier = Modifier
                     .weight(.2f)
-                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(12.dp))
-                    .border(1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(12.dp))
                     .padding(vertical = 4.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(
@@ -183,7 +182,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.minus),
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
                     contentDescription = "Menos",
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -220,8 +219,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
             Box(
                 modifier = Modifier
                     .weight(.2f)
-                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(12.dp))
-                    .border(1.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(12.dp))
                     .padding(vertical = 4.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(
@@ -251,7 +249,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.add),
-                    tint = MaterialTheme.colorScheme.surfaceTint,
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
                     contentDescription = "Más",
                     modifier = Modifier.align(Alignment.Center)
                 )
