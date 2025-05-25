@@ -30,8 +30,6 @@ object BarcodeScanner {
     }
 
     fun startScan(onQueryChange: (String) -> Unit) {
-//        if (!initialized) return
-
         scanner.startScan()
             .addOnSuccessListener { barcode ->
                 val rawValue: String? = barcode.rawValue?.trimStart('0')

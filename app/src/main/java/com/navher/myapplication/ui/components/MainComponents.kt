@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -181,7 +182,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                     }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.minus),
+                    painter = painterResource(id = R.drawable.remove),
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
                     contentDescription = "Menos",
                     modifier = Modifier.align(Alignment.Center)
@@ -248,9 +249,8 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                     }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add),
+                   Icons.Filled.Add, contentDescription = "Más",
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    contentDescription = "Más",
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
@@ -347,7 +347,7 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
 
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.primary)
             .wrapContentSize()
             .pointerInput(Unit) {
@@ -389,8 +389,6 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                 )
             }
 
-            // Contenido expandible
-            // SUGGESTION: Usar AnimatedVisibility para una animación de entrada/salida más suave
             AnimatedVisibility(isExpanded) {
                 Column(
                     modifier = Modifier

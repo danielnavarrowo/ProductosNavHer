@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         // Initialize DataStore
         dataService = DataService(this)
@@ -43,9 +42,8 @@ class MainActivity : ComponentActivity() {
         ModuleInstallManager.initialize(this)
         BarcodeScanner.initialize(this)
         moduleInstallClient.installModules(moduleInstallRequest)
-
         handleIntent(intent)
-
+        enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
                 MyApp()

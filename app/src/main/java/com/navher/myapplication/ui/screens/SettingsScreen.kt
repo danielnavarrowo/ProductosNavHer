@@ -57,7 +57,7 @@ fun SettingsScreen(navController: NavController) {
                 }
                 Text(
                     "Ajustes",
-                    style = MaterialTheme.typography.displaySmall,
+                    style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground
                 )
