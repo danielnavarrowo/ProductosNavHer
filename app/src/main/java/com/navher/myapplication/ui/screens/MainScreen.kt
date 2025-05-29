@@ -1,6 +1,5 @@
 package com.navher.myapplication.ui.screens
 
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,12 +18,11 @@ import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
-import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -72,16 +69,10 @@ fun MainScreen(
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
-    val onRefreshLambda = { productsViewModel.loadProducts() }
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.secondary)
-            .pullToRefresh(
-                state = pullToRefreshState,
-                isRefreshing = isLoading,
-                onRefresh = onRefreshLambda
-            ),
+            .background(MaterialTheme.colorScheme.secondary),
         topBar = {
             Column(
                 modifier = Modifier
@@ -111,7 +102,16 @@ fun MainScreen(
             }
         },
         content = { innerPadding ->
-            Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            PullToRefreshBox(
+                isRefreshing = isLoading,
+                state = pullToRefreshState,
+                onRefresh = { productsViewModel.loadProducts() },
+                modifier = Modifier.padding(innerPadding),
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(state = pullToRefreshState, isRefreshing = isLoading, modifier = Modifier.align(Alignment.TopCenter))
+                }
+
+            ) {
                 Column(
                     modifier = Modifier
                         .background(
@@ -162,18 +162,6 @@ fun MainScreen(
                             )
                         }
                     }
-                }
-
-                val scaleFraction = if (isLoading) 1f else LinearOutSlowInEasing.transform(pullToRefreshState.distanceFraction).coerceIn(0f, 1f)
-                Box(
-                    Modifier
-                        .align(Alignment.TopCenter)
-                        .graphicsLayer {
-                            scaleX = scaleFraction
-                            scaleY = scaleFraction
-                        }
-                ) {
-                    PullToRefreshDefaults.LoadingIndicator(state = pullToRefreshState, isRefreshing = isLoading)
                 }
             }
         }
