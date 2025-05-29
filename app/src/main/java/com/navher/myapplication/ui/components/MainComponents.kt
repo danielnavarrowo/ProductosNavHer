@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -17,22 +18,26 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconButtonDefaults.iconButtonVibrantColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,6 +62,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.android.internal.org.bouncycastle.math.raw.Mod
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.Products
@@ -79,14 +85,16 @@ fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
         modifier = Modifier
             .weight(.16f)
             .align(Alignment.CenterVertically)
-            .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.inversePrimary, RoundedCornerShape(16.dp)),
+            .fillMaxHeight(),
+
         onClick = {
             startScan(onQueryChange)
         },
-        colors = IconButtonDefaults.iconButtonColors(
-            contentColor = MaterialTheme.colorScheme.secondary
-        )
+        colors = iconButtonVibrantColors().copy(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary,
+        ),
+        shape = RoundedCornerShape(16.dp),
     ) {
         Icon(
             modifier = Modifier.padding(12.dp),
@@ -102,21 +110,16 @@ fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
     Box(
         modifier = Modifier
             .background(
-                color = Color.Transparent,
-                shape = RoundedCornerShape(10.dp)
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(8.dp)
             )
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.secondary,
-                shape = RoundedCornerShape(6.dp)
-            )
-            .padding(horizontal = 6.dp, vertical = 2.dp)
+            .padding(horizontal = 8.dp, vertical = 3.dp)
             .align(Alignment.CenterHorizontally)
             .clickable { navController.navigate("settings") }
     ) {
         Text(
             text = stringResource(R.string.last_update_prefix, updateDate ),
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
         )
@@ -139,23 +142,22 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 
 
     Column(
-        modifier = Modifier.background(
-            color = MaterialTheme.colorScheme.inversePrimary,
-            shape = RoundedCornerShape(10.dp),
-        ).padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(.7f),
+                .fillMaxWidth().height(46.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Box(
                 modifier = Modifier
-                    .weight(.2f)
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(12.dp))
-                    .padding(vertical = 4.dp)
+                    .weight(.25f)
+                    .fillMaxHeight()
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer.copy(.3f), shape = RoundedCornerShape(24.dp))
+
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = { offset ->
@@ -185,7 +187,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                     painter = painterResource(id = R.drawable.remove),
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
                     contentDescription = "Menos",
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center).size(32.dp)
                 )
             }
 
@@ -204,24 +206,28 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                         }
                     }
                 },
-                textStyle = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.primary,
+                textStyle = MaterialTheme.typography.headlineSmall.copy(
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Black
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 modifier = Modifier
-                    .weight(.2f)
-                    .padding(vertical = 6.dp)
+                    .fillMaxHeight()
+                    .weight(.25f)
+                    .background(
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .wrapContentSize(Alignment.Center)
             )
 
             // Botón de incremento con soporte para presión continua
             Box(
                 modifier = Modifier
-                    .weight(.2f)
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(12.dp))
-                    .padding(vertical = 4.dp)
+                    .weight(.25f).fillMaxHeight()
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer.copy(.3f), shape = RoundedCornerShape(24.dp))
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = { offset ->
@@ -249,16 +255,17 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                     }
             ) {
                 Icon(
-                   Icons.Filled.Add, contentDescription = "Más",
+                    painter = painterResource(id = R.drawable.add),
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.align(Alignment.Center)
+                    contentDescription = "Más",
+                    modifier = Modifier.align(Alignment.Center).size(32.dp)
                 )
             }
 
         }
 
         Spacer(
-            modifier = Modifier.height(6.dp)
+            modifier = Modifier.height(16.dp)
         )
 
         Slider(
@@ -285,7 +292,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 
 @Composable
 fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier) {
-    OutlinedTextField(
+    TextField(
         value = query,
         onValueChange = onQueryChange,
         modifier = modifier
@@ -293,11 +300,14 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         placeholder = {
             Text(
                 text = stringResource(R.string.search_products_placeholder),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Black,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                ),
+
             )
         },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }, // Descripción podría ser stringResource(R.string.search_icon_cd)
+        leadingIcon = { Icon(painter = painterResource(R.drawable.search), contentDescription = null) }, // Descripción podría ser stringResource(R.string.search_icon_cd)
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(
@@ -306,7 +316,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
                     }
                 ) {
                     Icon(
-                        Icons.Default.Clear,
+                       painter = painterResource(R.drawable.close),
                         contentDescription = stringResource(R.string.clear_search_cd),
                         tint = MaterialTheme.colorScheme.onSurface
                     )
@@ -314,15 +324,22 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
             }
         },
         singleLine = true,
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = MaterialTheme.colorScheme.secondary
+        shape = RoundedCornerShape(24.dp),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            ),
+        textStyle = MaterialTheme.typography.bodyLarge.copy(
+            fontWeight = FontWeight.Black,
+            color = MaterialTheme.colorScheme.onSurface
         ),
-        textStyle = MaterialTheme.typography.bodySmall,
     )
 }
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DefaultLocale") // Mantenido por String.format
 @Composable
 fun ProductCard(product: Products, forceExpanded: Boolean = false) {
@@ -347,8 +364,8 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
 
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.primary)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.background)
             .wrapContentSize()
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -366,26 +383,30 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth() // Usa fillMaxWidth para consistencia
-                    .padding(6.dp),
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically // Alinear verticalmente
             ) {
                 Text(
                     text = product.descripcion,
                     modifier = Modifier.weight(3.2f), // Mantenido el peso
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start,
-                    maxLines = 2, // Evita que textos muy largos descuadren mucho (opcional)
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis // Opcional
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
                 Text(
+                    modifier = Modifier.weight(.9f).background(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(16.dp)
+                    ).padding(3.dp),
                     text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
-                    modifier = Modifier.weight(1f), // Mantenido el peso
-                    fontWeight = FontWeight.Bold,
+                     // Mantenido el peso
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.End
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    textAlign = TextAlign.Center
                 )
             }
 
@@ -393,37 +414,37 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                         .padding(10.dp),
                 ) {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .fillMaxWidth().padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+
                     ) {
                         PriceText( // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.cost_label), // SUGGESTION: stringResource
                             value = product.pcosto * multiplier,
-                            modifier = Modifier.weight(.8f),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.weight(1f),
                         )
                         PriceText( // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.sale_label), // SUGGESTION: stringResource
                             value = product.pventa * multiplier,
-                            modifier = Modifier
-                                .weight(1f),
                             color = MaterialTheme.colorScheme.onPrimaryContainer, // Color específico para Venta
-                            style = MaterialTheme.typography.titleMedium, // Estilo específico para Venta
-                            fontWeight = FontWeight.Black // Negrita para Venta
+                            style = MaterialTheme.typography.titleLarge, // Estilo específico para Venta
+                            fontWeight = FontWeight.Black,
+                            modifier = Modifier.weight(1f),
                         )
                         PriceText( // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.wholesale_label), // SUGGESTION: stringResource
                             value = product.mayoreo * multiplier,
-                            modifier = Modifier.weight(.8f),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.weight(1f),
                         )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -442,7 +463,7 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
  */
 @SuppressLint("DefaultLocale") // Mantenido por String.format
 @Composable
-private fun PriceText(
+private fun RowScope.PriceText(
     label: String,
     value: Double,
     modifier: Modifier = Modifier,
@@ -451,12 +472,27 @@ private fun PriceText(
     fontWeight: FontWeight? = null
 ) {
     val formattedValue = "$${String.format("%.2f", value)}"
-    Text(
-        text = "$label\n$formattedValue",
-        style = style,
-        color = color,
-        fontWeight = fontWeight,
-        textAlign = TextAlign.Center,
-        modifier = modifier
-    )
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = color.copy(alpha = .6f),
+            fontWeight = fontWeight,
+            textAlign = TextAlign.Center,
+
+        )
+        Spacer(modifier = Modifier.height(3.dp))
+        Text(
+            text = formattedValue,
+            style = style,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = fontWeight,
+            textAlign = TextAlign.Center,
+
+        )
+    }
 }

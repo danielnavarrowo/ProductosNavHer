@@ -93,7 +93,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+
+    implementation("androidx.compose.material3:material3-android:1.4.0-alpha15")
     implementation(libs.androidx.datastore.core.android)
 
     implementation(libs.androidx.foundation.android)
@@ -110,6 +111,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
+
 
     implementation(platform(libs.supabase.bom))
     implementation(libs.realtime.kt)

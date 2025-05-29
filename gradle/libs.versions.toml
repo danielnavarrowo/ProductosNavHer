@@ -1,6 +1,6 @@
 [versions]
-agp = "8.10.0"
-datastorePreferences = "1.1.6"
+agp = "8.10.1"
+datastorePreferences = "1.1.7"
 kotlin = "2.1.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -11,17 +11,17 @@ appcompat = "1.7.0"
 material = "1.12.0"
 
 activityCompose = "1.10.1"
-composeBom = "2025.05.00"
+composeBom = "2025.05.01"
 
 playServicesCodeScanner = "16.1.0"
 supabase = "3.1.4"
 coilCompose = "2.7.0"
 
-datastoreCoreAndroid = "1.1.6"
+datastoreCoreAndroid = "1.1.7"
 
 playServicesBase = "18.7.0"
 playServicesTfliteJava = "16.4.0"
-uiTextGoogleFonts = "1.8.1"
+uiTextGoogleFonts = "1.8.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,7 +42,6 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version = "2.9.0" }
 coil-compose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
@@ -53,8 +52,8 @@ supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version
 ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.1.2" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.8.1" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.8.1" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.8.2" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.8.2" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
