@@ -3,14 +3,12 @@ package com.navher.myapplication.ui.components
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -19,21 +17,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconButtonDefaults.iconButtonVibrantColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -62,7 +54,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.android.internal.org.bouncycastle.math.raw.Mod
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.Products
@@ -398,14 +389,14 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                 )
                 Text(
                     modifier = Modifier.weight(.9f).background(
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(16.dp)
                     ).padding(3.dp),
                     text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
                      // Mantenido el peso
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center
                 )
             }
@@ -427,14 +418,14 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                         PriceText( // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.cost_label), // SUGGESTION: stringResource
                             value = product.pcosto * multiplier,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.weight(1f),
                         )
                         PriceText( // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.sale_label), // SUGGESTION: stringResource
                             value = product.pventa * multiplier,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer, // Color específico para Venta
+                            color = MaterialTheme.colorScheme.onSurface, // Color específico para Venta
                             style = MaterialTheme.typography.titleLarge, // Estilo específico para Venta
                             fontWeight = FontWeight.Black,
                             modifier = Modifier.weight(1f),
@@ -442,7 +433,7 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                         PriceText( // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.wholesale_label), // SUGGESTION: stringResource
                             value = product.mayoreo * multiplier,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.weight(1f),
                         )

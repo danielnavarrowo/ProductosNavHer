@@ -2,7 +2,6 @@ package com.navher.myapplication.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -71,8 +69,7 @@ fun MainScreen(
     val pullToRefreshState = rememberPullToRefreshState()
 
     Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.secondary),
+        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = .13f),
         topBar = {
             Column(
                 modifier = Modifier
@@ -108,15 +105,16 @@ fun MainScreen(
                 onRefresh = { productsViewModel.loadProducts() },
                 modifier = Modifier.padding(innerPadding),
                 indicator = {
-                    PullToRefreshDefaults.LoadingIndicator(state = pullToRefreshState, isRefreshing = isLoading, modifier = Modifier.align(Alignment.TopCenter))
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullToRefreshState,
+                        isRefreshing = isLoading,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
                 }
 
             ) {
                 Column(
                     modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = .1f),
-                        )
                         .padding(start = 12.dp, top = 16.dp, end = 12.dp)
                         .fillMaxSize(),
                 ) {
@@ -145,21 +143,14 @@ fun MainScreen(
                     } else if (filteredProducts.isNotEmpty()) {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            items(filteredProducts, key = { it.codigo }) { product ->
+                            items(filteredProducts.take(50), key = { it.codigo }) { product ->
                                 ProductCard(
                                     product = product,
                                     forceExpanded = shouldAutoExpand
                                 )
                             }
-                        }
-                    } else if (isLoading && productsList.isEmpty()) {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            ContainedLoadingIndicator(
-                                modifier = Modifier
-                                    .size(162.dp)
-                            )
                         }
                     }
                 }
