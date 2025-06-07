@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.navher.myapplication"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
 
@@ -24,9 +24,9 @@ android {
 
         applicationId = "com.navher.productos"
         minSdk = 28
-        targetSdk = 35
-        versionCode = 3
-        versionName = "1.3.0"
+        targetSdk = 36
+        versionCode = 4
+        versionName = "2.0.0"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -114,7 +114,6 @@ dependencies {
 
 
     implementation(platform(libs.supabase.bom))
-    implementation(libs.realtime.kt)
     implementation(libs.postgrest.kt)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.android)
