@@ -9,6 +9,12 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_20)
+    }
+}
+
 android {
     namespace = "com.navher.myapplication"
     compileSdk = 36
@@ -53,11 +59,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_20
         targetCompatibility = JavaVersion.VERSION_20
-        // Habilitar desugaring
         isCoreLibraryDesugaringEnabled = true
-    }
-    kotlinOptions {
-        jvmTarget = "20"
     }
     buildFeatures {
         compose = true
@@ -94,7 +96,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.4.0-alpha15")
+    implementation("androidx.compose.material3:material3-android:1.5.0-alpha04")
     implementation(libs.androidx.datastore.core.android)
 
     implementation(libs.androidx.foundation.android)
@@ -123,5 +125,5 @@ dependencies {
     implementation(libs.play.services.code.scanner)
 
     // Añadir dependencia de desugaring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

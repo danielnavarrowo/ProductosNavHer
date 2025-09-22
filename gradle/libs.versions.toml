@@ -1,27 +1,28 @@
 [versions]
-agp = "8.10.1"
+agp = "8.13.0"
 datastorePreferences = "1.1.7"
-kotlin = "2.1.21"
-coreKtx = "1.16.0"
+kotlin = "2.2.20"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.5.0"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
 appcompat = "1.7.1"
 
-material = "1.12.0"
+material = "1.13.0"
 
-activityCompose = "1.10.1"
-composeBom = "2025.06.00"
+activityCompose = "1.11.0"
+composeBom = "2025.09.00"
 
 playServicesCodeScanner = "16.1.0"
-supabase = "3.1.4"
+supabase = "3.2.3"
 coilCompose = "2.7.0"
 
 datastoreCoreAndroid = "1.1.7"
 
-playServicesBase = "18.7.0"
+playServicesBase = "18.8.0"
 playServicesTfliteJava = "16.4.0"
-uiTextGoogleFonts = "1.8.2"
+uiTextGoogleFonts = "1.9.1"
+desugarJdkLibs = "2.1.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,9 +32,9 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.10.2" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version = "3.1.3" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version = "3.3.0" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.9.1" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.9.4" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -43,25 +44,22 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
-androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version = "2.9.0" }
+androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version = "2.9.4" }
 coil-compose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
-kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.1" }
+kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
 play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabase" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.1.3" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.3.0" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.8.2" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.8.2" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.9.1" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.9.1" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
-
-
-
