@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
@@ -70,6 +72,7 @@ fun MainScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primary.copy(alpha = .13f),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             Column(
                 modifier = Modifier
@@ -115,7 +118,7 @@ fun MainScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(start = 12.dp, top = 16.dp, end = 12.dp)
+                        .padding(start = 12.dp, end = 12.dp)
                         .fillMaxSize(),
                 ) {
                     if (filteredProducts.isEmpty() && !isLoading) {
@@ -145,12 +148,21 @@ fun MainScreen(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
+                            item {
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
+
                             items(filteredProducts.take(50), key = { it.codigo }) { product ->
                                 ProductCard(
                                     product = product,
                                     forceExpanded = shouldAutoExpand
                                 )
                             }
+
+                            item {
+                                Spacer(modifier = Modifier.height(18.dp))
+                            }
+
                         }
                     }
                 }
