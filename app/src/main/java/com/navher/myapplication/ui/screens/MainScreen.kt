@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -55,12 +56,15 @@ fun MainScreen(
     val updateDate by productsViewModel.updateDate.collectAsState()
 
     val filteredProducts = remember(searchQuery, productsList) {
-        if (searchQuery.isEmpty()) productsList
-        else {
-            productsList.filter {
+        val sortedList = productsList.sortedByDescending { it.iprioridad == 1 }
+        if (searchQuery.isEmpty()) {
+            sortedList
+        } else {
+            sortedList.filter {
                 it.descripcion.contains(searchQuery, ignoreCase = true) ||
                         it.codigo.contains(searchQuery, ignoreCase = true)
             }
+
         }
     }
 
@@ -146,21 +150,25 @@ fun MainScreen(
                     } else if (filteredProducts.isNotEmpty()) {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
                             item {
                                 Spacer(modifier = Modifier.height(12.dp))
                             }
 
                             items(filteredProducts.take(50), key = { it.codigo }) { product ->
+                                val index = filteredProducts.indexOf(product)
+                                val displayedProducts = filteredProducts.take(50)
                                 ProductCard(
                                     product = product,
-                                    forceExpanded = shouldAutoExpand
+                                    forceExpanded = shouldAutoExpand,
+                                    isFirstItem = index == 0,
+                                    isLastItem = index == displayedProducts.size - 1
                                 )
                             }
 
                             item {
-                                Spacer(modifier = Modifier.height(18.dp))
+                                Spacer(modifier = Modifier.navigationBarsPadding())
                             }
 
                         }

@@ -333,10 +333,16 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DefaultLocale") // Mantenido por String.format
 @Composable
-fun ProductCard(product: Products, forceExpanded: Boolean = false) {
+fun ProductCard(
+    product: Products,
+    forceExpanded: Boolean = false,
+    isFirstItem: Boolean = false,
+    isLastItem: Boolean = false
+) {
     var isExpanded by remember { mutableStateOf(forceExpanded) } // Inicializar con forceExpanded
     var multiplier by remember { mutableIntStateOf(1) }
     val focusManager = LocalFocusManager.current
+    val isHighPriority = product.iprioridad == 1
 
     // Ajusta la expansión si forceExpanded cambia externamente
     LaunchedEffect(forceExpanded) {
@@ -355,8 +361,15 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
 
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.background)
+            .clip(
+                when {
+                    isFirstItem -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                    isLastItem -> RoundedCornerShape( bottomStart = 16.dp, bottomEnd = 16.dp)
+                    else -> RoundedCornerShape(0.dp)
+                }
+            )
+            .background( color= MaterialTheme.colorScheme.background
+            )
             .wrapContentSize()
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -378,11 +391,23 @@ fun ProductCard(product: Products, forceExpanded: Boolean = false) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically // Alinear verticalmente
             ) {
+
+                if (isHighPriority) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.star),
+                        contentDescription = "Estrella",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .padding(end = 3.dp)
+                            .size(12.dp)
+                    )
+                }
                 Text(
                     text = product.descripcion,
                     modifier = Modifier.weight(3.2f), // Mantenido el peso
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     textAlign = TextAlign.Start,
                     maxLines = 2,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis

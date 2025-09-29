@@ -63,7 +63,7 @@ class DataService(private val context: Context) {
     // Fetch products from Supabase
     private suspend fun fetchProducts(): List<Products> {
         return supabaseClient.from("productos")
-            .select(columns = Columns.list("codigo, descripcion, pventa, pcosto, mayoreo"))
+            .select(columns = Columns.list("codigo, descripcion, pventa, pcosto, mayoreo, iprioridad"))
             .decodeList<Products>()
     }
 
@@ -104,4 +104,5 @@ data class Products(
     val pventa: Double,
     val pcosto: Double,
     val mayoreo: Double,
+    val iprioridad: Int?
 )
