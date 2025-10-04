@@ -81,11 +81,11 @@ fun MainScreen(
             Column(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = .05f),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = .04f),
                         shape = MaterialTheme.shapes.large
                     )
                     .statusBarsPadding()
-                    .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+                    .padding(12.dp),
             ) {
                 Row(
                     modifier = Modifier
@@ -96,7 +96,7 @@ fun MainScreen(
                         query = searchQuery,
                         onQueryChange,
                         modifier = Modifier
-                            .weight(.84f)
+                            .weight(.85f)
                             .fillMaxHeight()
                     )
                     ScannerButton(onQueryChange)

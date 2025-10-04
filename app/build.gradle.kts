@@ -103,6 +103,7 @@ dependencies {
     implementation(libs.play.services.base)
     implementation(libs.play.services.tflite.java)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

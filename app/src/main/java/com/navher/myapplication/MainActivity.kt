@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.navher.myapplication.ui.screens.LoginScreen
 import com.navher.myapplication.ui.screens.MainScreen
 import com.navher.myapplication.ui.screens.SettingsScreen
 import com.navher.myapplication.ui.theme.MyApplicationTheme
@@ -69,7 +70,7 @@ class MainActivity : ComponentActivity() {
     fun MyApp() {
         val navController = rememberNavController()
 
-        NavHost(navController = navController, startDestination = "main") {
+        NavHost(navController = navController, startDestination = "login") {
             composable("main") {
                 MainScreen(
                     productsViewModel = productsViewModel,
@@ -79,6 +80,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
             composable("settings") { SettingsScreen(navController) }
+            composable("login") {
+                LoginScreen(
+                )
+            }
         }
     }
 

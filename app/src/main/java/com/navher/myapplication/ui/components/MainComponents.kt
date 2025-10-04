@@ -413,10 +413,10 @@ fun ProductCard(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
                 Text(
-                    modifier = Modifier.weight(.9f).background(
+                    modifier = Modifier.background(
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(16.dp)
-                    ).padding(3.dp),
+                    ).padding(horizontal = 6.dp, vertical = 3.dp),
                     text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
                      // Mantenido el peso
                     style = MaterialTheme.typography.bodyLarge,
@@ -479,7 +479,7 @@ fun ProductCard(
  */
 @SuppressLint("DefaultLocale") // Mantenido por String.format
 @Composable
-private fun RowScope.PriceText(
+private fun PriceText(
     label: String,
     value: Double,
     modifier: Modifier = Modifier,

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.navher.myapplication.BuildConfig
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
@@ -36,6 +37,8 @@ class DataService(private val context: Context) {
     ) {
         install(Postgrest)
     }
+
+    //val auth = supabaseClient.auth
 
 
     //Function to check if there is any data in the cache, and return it if it up to date.
