@@ -6,8 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
@@ -23,6 +25,8 @@ import com.navher.myapplication.utils.DataService
 import com.navher.myapplication.utils.ModuleInstallManager
 import com.navher.myapplication.utils.ModuleInstallManager.moduleInstallClient
 import com.navher.myapplication.utils.ModuleInstallManager.moduleInstallRequest
+import com.navher.myapplication.viewmodels.AuthViewModel
+import com.navher.myapplication.viewmodels.AuthViewModelFactory
 import com.navher.myapplication.viewmodels.ProductsViewModel
 import com.navher.myapplication.viewmodels.ProductsViewModelFactory
 
@@ -32,6 +36,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var dataService: DataService
     private lateinit var productsViewModel: ProductsViewModel
     private var searchQuery by mutableStateOf("")
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,8 @@ class MainActivity : ComponentActivity() {
         dataService = DataService(this)
         val factory = ProductsViewModelFactory(dataService)
         productsViewModel = ViewModelProvider(this, factory)[ProductsViewModel::class.java]
+        val authFactory = AuthViewModelFactory(dataService)
+        authViewModel = ViewModelProvider(this, authFactory)[AuthViewModel::class.java]
         ModuleInstallManager.initialize(this)
         BarcodeScanner.initialize(this)
         moduleInstallClient.installModules(moduleInstallRequest)
@@ -69,20 +76,38 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MyApp() {
         val navController = rememberNavController()
+        var startDestination by remember { mutableStateOf<String?>(null) }
 
-        NavHost(navController = navController, startDestination = "login") {
-            composable("main") {
-                MainScreen(
-                    productsViewModel = productsViewModel,
-                    searchQuery = searchQuery,
-                    onQueryChange = { searchQuery = it },
-                    navController = navController
-                )
+        LaunchedEffect(Unit) {
+            authViewModel.checkSession {
+                startDestination = "main"
+                productsViewModel.loadProducts()
             }
-            composable("settings") { SettingsScreen(navController) }
-            composable("login") {
-                LoginScreen(
-                )
+            if (startDestination == null) {
+                startDestination = "login"
+            }
+        }
+
+        startDestination?.let { start ->
+            NavHost(navController = navController, startDestination = start) {
+                composable("main") {
+                    MainScreen(
+                        productsViewModel = productsViewModel,
+                        searchQuery = searchQuery,
+                        onQueryChange = { searchQuery = it },
+                        navController = navController
+                    )
+                }
+                composable("settings") { SettingsScreen(navController) }
+                composable("login") {
+                    LoginScreen(
+                        authViewModel = authViewModel,
+                        onLoginSuccess = {
+                            productsViewModel.loadProducts()
+                            navController.navigate("main")
+                        }
+                    )
+                }
             }
         }
     }

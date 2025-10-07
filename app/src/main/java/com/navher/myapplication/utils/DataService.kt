@@ -7,7 +7,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.navher.myapplication.BuildConfig
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.OTP
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
@@ -36,9 +39,50 @@ class DataService(private val context: Context) {
         supabaseKey = BuildConfig.SUPABASE_KEY
     ) {
         install(Postgrest)
+        install(Auth)
     }
 
-    //val auth = supabaseClient.auth
+    val auth = supabaseClient.auth
+
+    suspend fun sendOTP(email: String): Result<Unit> {
+        return try {
+            auth.signInWith(OTP) {
+                this.email = email
+                createUser = false
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            if (e is io.github.jan.supabase.auth.exception.AuthRestException) {
+                return if (e.statusCode == 422) Result.failure(Exception("Este correo no está registrado. Intenta con otro correo.")) else Result.failure(Exception("Error: " + e.statusCode.toString() + " " + e.errorCode))
+            }
+            Result.failure(e)
+        }
+    }
+
+    suspend fun verifyOTP(email: String, token: String): Result<Boolean> {
+        return try {
+            auth.verifyEmailOtp(
+                type = OtpType.Email.EMAIL,
+                email = email,
+                token = token
+            )
+            Result.success(true)
+        } catch (e: Exception) {
+            if (e is io.github.jan.supabase.auth.exception.AuthRestException) {
+                return if (e.statusCode == 403) Result.failure(Exception("Código no válido o expirado. Inténtalo de nuevo.")) else Result.failure(Exception("Error: " + e.statusCode.toString() + " " + e.errorCode))
+            }
+            Result.failure(e)
+        }
+    }
+
+    fun isUserLoggedIn(): Boolean {
+        return auth.currentSessionOrNull() != null
+    }
+
+    // Función para cerrar sesión
+    suspend fun signOut() {
+        auth.signOut()
+    }
 
 
     //Function to check if there is any data in the cache, and return it if it up to date.

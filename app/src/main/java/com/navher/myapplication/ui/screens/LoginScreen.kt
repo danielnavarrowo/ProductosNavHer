@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,63 +20,99 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.then
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.text.isDigitsOnly
 import com.navher.myapplication.R
+import com.navher.myapplication.viewmodels.AuthViewModel
 
-@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun LoginScreen () {
-    var showOTPForm by remember { mutableStateOf(false) }
+fun LoginScreen (authViewModel: AuthViewModel,
+                 onLoginSuccess: () -> Unit) {
+
+    val email = authViewModel.emailState
+    val otpSent by authViewModel.otpSent.collectAsState()
+    val isLoading by authViewModel.isLoading.collectAsState()
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+    val otpValue = remember { TextFieldState() }
+    val isEmailValid = remember(email.text) {
+        email.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email.text).matches()
+    }
+
+    LaunchedEffect(otpValue.text) {
+        if (otpValue.text.length == 6) {
+            authViewModel.verifyOTP(otpValue.text.toString(), onLoginSuccess)
+        }
+    }
+
 
     Scaffold (
         containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton =
             {
-                FloatingActionButton(
-                    onClick = { showOTPForm = !showOTPForm },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(16.dp),
-
-                ) {
+                if (!otpSent && !isLoading) {
+                    FloatingActionButton(
+                        onClick = {
+                            if (isEmailValid) {
+                                authViewModel.sendOTP()
+                            }
+                        },
+                        containerColor = if (isEmailValid) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                    ) {
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_back),
-                            contentDescription = "Flecha siguiente",
-                            tint = MaterialTheme.colorScheme.onPrimary,
+                            contentDescription = "Enviar código",
+                            tint = if (isEmailValid) {
+                                MaterialTheme.colorScheme.onPrimary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
                             modifier = Modifier
                                 .size(36.dp)
                                 .rotate(180f)
-
                         )
+                    }
                 }
             }
     ) { innerPadding ->
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(top = 16.dp, bottom = 128.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(top = 16.dp, bottom = 0.dp, start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Bottom),
         ) {
@@ -91,9 +126,16 @@ fun LoginScreen () {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                state = rememberTextFieldState(),
+                state = email,
                 label = { Text("Correo electrónico") },
                 lineLimits = TextFieldLineLimits.SingleLine,
+                enabled = !otpSent && !isLoading,
+                isError = email.text.isNotEmpty() && !isEmailValid,
+                supportingText = {
+                    if (email.text.isNotEmpty() && !isEmailValid) {
+                        Text("Introduce un correo electrónico válido.")
+                    }
+                },
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -104,17 +146,30 @@ fun LoginScreen () {
                     keyboardType = KeyboardType.Email
                 ),
             )
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            if (isLoading) {
+                LoadingIndicator(
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(112.dp))
 
             AnimatedVisibility(
-                visible = showOTPForm,
-                enter = expandVertically(
-                    expandFrom = Alignment.Top
-                ) + fadeIn(),
-                exit = shrinkVertically(
-                    shrinkTowards = Alignment.Top
-                ) + fadeOut()
+                visible = otpSent,
+                enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+                exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
             ) {
-                OTPForm()
+                OTPForm(
+                    otpValue
+                )
             }
 
 
@@ -124,180 +179,59 @@ fun LoginScreen () {
 }
 
 @Composable
-fun OTPForm() {
-    var otpValue by remember { mutableStateOf("") }
+fun OTPForm(otpValue: TextFieldState) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Spacer(modifier = Modifier.height(128.dp))
+
         Text(
             text = "Hemos enviado un código de 6 dígitos a tu correo. Introdúcelo a continuación.",
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.onBackground
             ),
         )
+        BasicTextField(
+            state = otpValue,
+            inputTransformation = InputTransformation.maxLength(6)
+                .then(DigitOnlyInputTransformation()),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.NumberPassword
+            ),
+            decorator = { innerTextField ->
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    repeat(6) { index ->
+                        val char = otpValue.text.getOrNull(index)?.toString() ?: ""
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceContainer,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                            ,
+                            contentAlignment = Alignment.Center,
 
-        OTPTextField(
-            otpValue = otpValue,
-            onOtpValueChange = { newValue ->
-                if (newValue.length <= 6 && newValue.all { it.isDigit() }) {
-                    otpValue = newValue
-                }
-            }
-        )
-    }
-}
-
-//@Composable
-//fun OTPTextField(
-//    otpValue: String,
-//    onOtpValueChange: (String) -> Unit,
-//    otpLength: Int = 6
-//) {
-//    BasicTextField(
-//        value = otpValue,
-//        onValueChange = onOtpValueChange,
-//        keyboardOptions = KeyboardOptions(
-//            keyboardType = KeyboardType.NumberPassword
-//        ),
-//        decorationBox = {
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-//            ) {
-//                repeat(otpLength) { index ->
-//                    val char = when {
-//                        index < otpValue.length -> otpValue[index].toString()
-//                        else -> ""
-//                    }
-//                    val isFocused = index == otpValue.length
-//
-//                    Box(
-//                        modifier = Modifier
-//                            .width(48.dp)
-//                            .height(56.dp)
-//                            .border(
-//                                width = if (isFocused) 2.dp else 1.dp,
-//                                color = if (isFocused)
-//                                    MaterialTheme.colorScheme.primary
-//                                else
-//                                    MaterialTheme.colorScheme.outline,
-//                                shape = RoundedCornerShape(12.dp)
-//                            )
-//                            .background(
-//                                color = if (isFocused)
-//                                    MaterialTheme.colorScheme.surfaceContainerLowest
-//                                else
-//                                    MaterialTheme.colorScheme.surfaceContainer,
-//                                shape = RoundedCornerShape(12.dp)
-//                            ),
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        Text(
-//                            text = char,
-//                            style = MaterialTheme.typography.headlineMedium.copy(
-//                                color = MaterialTheme.colorScheme.onBackground,
-//                                textAlign = TextAlign.Center
-//                            )
-//                        )
-//                    }
-//                }
-//            }
-//        },
-//        textStyle = TextStyle(
-//            color = Color.Transparent
-//        ),
-//        cursorBrush = SolidColor(Color.Transparent)
-//    )
-//}
-
-@Composable
-fun OTPTextField(
-    otpValue: String,
-    onOtpValueChange: (String) -> Unit,
-    otpLength: Int = 6
-) {
-    BasicTextField(
-        value = otpValue,
-        onValueChange = onOtpValueChange,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.NumberPassword
-        ),
-        decorationBox = { innerTextField ->
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                repeat(otpLength) { index ->
-                    val char = otpValue.getOrNull(index)?.toString() ?: ""
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .border(
-                                width = 1.dp,
-                                color = if (char.isEmpty()) Color.Gray else Color.Black,
-                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                            Text(
+                                text = char,
+                                style = MaterialTheme.typography.headlineMedium
                             )
-                            .background(Color.White),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = char,
-                            style = MaterialTheme.typography.headlineMedium
-                        )
+                        }
                     }
                 }
             }
-        }
-    )
-}
+        )
 
-class EmailViewModel : ViewModel() {
-    var email by mutableStateOf("")
-        private set
-
-    val emailHasErrors by derivedStateOf {
-        if (email.isNotEmpty()) {
-            // Email is considered erroneous until it completely matches EMAIL_ADDRESS.
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        } else {
-            false
-        }
-    }
-
-    fun updateEmail(input: String) {
-        email = input
+        Spacer(modifier = Modifier.height(112.dp))
     }
 }
 
-@Composable
-fun ValidatingInputTextField(
-    email: String,
-    updateState: (String) -> Unit,
-    validatorHasErrors: Boolean
-) {
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        value = email,
-        onValueChange = updateState,
-        label = { Text("Email") },
-        isError = validatorHasErrors,
-        supportingText = {
-            if (validatorHasErrors) {
-                Text("Incorrect email format.")
-            }
+class DigitOnlyInputTransformation : InputTransformation {
+    override fun TextFieldBuffer.transformInput() {
+        if (!asCharSequence().isDigitsOnly()) {
+            revertAllChanges()
         }
-    )
-}
-
-@Preview
-@Composable
-fun ValidateInput() {
-    val emailViewModel: EmailViewModel = viewModel<EmailViewModel>()
-    ValidatingInputTextField(
-        email = emailViewModel.email,
-        updateState = { input -> emailViewModel.updateEmail(input) },
-        validatorHasErrors = emailViewModel.emailHasErrors
-    )
+    }
 }

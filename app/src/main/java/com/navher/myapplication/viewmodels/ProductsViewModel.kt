@@ -20,9 +20,6 @@ class ProductsViewModel(private val dataService: DataService) : ViewModel() {
     private val _updateDate = MutableStateFlow("")
     val updateDate: StateFlow<String> = _updateDate.asStateFlow()
 
-    init {
-        loadProducts()
-    }
 
     fun loadProducts() {
         viewModelScope.launch {

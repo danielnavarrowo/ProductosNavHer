@@ -124,6 +124,7 @@ dependencies {
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.play.services.code.scanner)
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.4")
 
     // Añadir dependencia de desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
