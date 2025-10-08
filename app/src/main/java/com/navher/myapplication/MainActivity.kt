@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
         }
 
         startDestination?.let { start ->
-            NavHost(navController = navController, startDestination = start) {
+            NavHost(navController = navController, startDestination = "login") {
                 composable("main") {
                     MainScreen(
                         productsViewModel = productsViewModel,
@@ -104,7 +104,9 @@ class MainActivity : ComponentActivity() {
                         authViewModel = authViewModel,
                         onLoginSuccess = {
                             productsViewModel.loadProducts()
-                            navController.navigate("main")
+                            navController.navigate("main") {
+                                popUpTo("login") { inclusive = true }
+                            }
                         }
                     )
                 }

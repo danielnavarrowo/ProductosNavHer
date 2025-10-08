@@ -26,7 +26,6 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.then
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -48,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.navher.myapplication.R
 import com.navher.myapplication.viewmodels.AuthViewModel
@@ -118,9 +118,14 @@ fun LoginScreen (authViewModel: AuthViewModel,
         ) {
             Text(
                 text = "Introduce tu correo electrónico",
-                style = MaterialTheme.typography.displayMedium.copy(
-                    color = MaterialTheme.colorScheme.onBackground
+                style = MaterialTheme.typography.displayLargeEmphasized.copy(
+                    color = MaterialTheme.colorScheme.primary,
+
+
                 ),
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Black,
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+
             )
 
             OutlinedTextField(
@@ -143,8 +148,14 @@ fun LoginScreen (authViewModel: AuthViewModel,
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                 ),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Email,
+                    imeAction = androidx.compose.ui.text.input.ImeAction.Send
                 ),
+                onKeyboardAction = {
+                    if (isEmailValid) {
+                        authViewModel.sendOTP()
+                    }
+                }
             )
             if (errorMessage != null) {
                 Text(

@@ -392,26 +392,30 @@ fun ProductCard(
                 verticalAlignment = Alignment.CenterVertically // Alinear verticalmente
             ) {
 
-                if (isHighPriority) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.star),
-                        contentDescription = "Estrella",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .padding(end = 3.dp)
-                            .size(12.dp)
+                Row(
+                    Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (isHighPriority) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.star),
+                            contentDescription = "Estrella",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .padding(end = 1.dp)
+                                .size(12.dp)
+                        )
+                    }
+                    Text(
+                        text = product.descripcion,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            color = MaterialTheme.colorScheme.onBackground
+                        ),
+                        textAlign = TextAlign.Start,
+                        maxLines = 2,
                     )
                 }
-                Text(
-                    text = product.descripcion,
-                    modifier = Modifier.weight(3.2f), // Mantenido el peso
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onBackground
-                    ),
-                    textAlign = TextAlign.Start,
-                    maxLines = 2,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-                )
+
                 Text(
                     modifier = Modifier.background(
                         color = MaterialTheme.colorScheme.primary,
@@ -422,7 +426,7 @@ fun ProductCard(
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center
+                    maxLines = 1,
                 )
             }
 
