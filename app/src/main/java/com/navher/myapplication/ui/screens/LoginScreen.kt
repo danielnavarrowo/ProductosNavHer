@@ -119,12 +119,9 @@ fun LoginScreen (authViewModel: AuthViewModel,
             Text(
                 text = "Introduce tu correo electrónico",
                 style = MaterialTheme.typography.displayLargeEmphasized.copy(
-                    color = MaterialTheme.colorScheme.primary,
-
-
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
                 ),
-                fontWeight = androidx.compose.ui.text.font.FontWeight.Black,
-                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Thin,
 
             )
 

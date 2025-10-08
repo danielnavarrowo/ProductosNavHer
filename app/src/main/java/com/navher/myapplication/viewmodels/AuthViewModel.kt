@@ -98,9 +98,13 @@ class AuthViewModel(private val dataService: DataService) : ViewModel() {
 
     fun checkSession(onLoggedIn: () -> Unit) {
         viewModelScope.launch {
+            println("Checking session from viewmodel...")
             if (dataService.isUserLoggedIn()) {
+                println("User is logged in, navigating to main screen.")
                 onLoggedIn()
             }
+            else {
+                println("No active session found.")}
         }
     }
 }

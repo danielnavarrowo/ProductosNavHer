@@ -76,6 +76,7 @@ class DataService(private val context: Context) {
     }
 
     fun isUserLoggedIn(): Boolean {
+
         return auth.currentSessionOrNull() != null
     }
 
