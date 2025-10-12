@@ -98,7 +98,18 @@ dependencies {
 
     implementation("androidx.compose.material3:material3-android:1.5.0-alpha06")
     implementation(libs.androidx.datastore.core.android)
-    //implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
+    // MLKit Barcode Scanning (bundled)
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
+    // CameraX
+    implementation("androidx.camera:camera-core:1.5.1")
+    implementation("androidx.camera:camera-camera2:1.5.1")
+    implementation("androidx.camera:camera-lifecycle:1.5.1")
+    implementation("androidx.camera:camera-view:1.5.1")
+
+    // Accompanist Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 
     implementation(libs.androidx.foundation.android)
     implementation(libs.play.services.base)
@@ -124,7 +135,6 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.play.services.code.scanner)
     implementation("io.github.jan-tennert.supabase:auth-kt:3.2.4")
 
     // Añadir dependencia de desugaring

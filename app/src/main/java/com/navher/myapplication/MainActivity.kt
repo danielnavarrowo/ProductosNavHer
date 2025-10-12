@@ -15,16 +15,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.navher.myapplication.ui.screens.BarcodeScannerScreen
 import com.navher.myapplication.ui.screens.LoginScreen
 import com.navher.myapplication.ui.screens.MainScreen
 import com.navher.myapplication.ui.screens.SettingsScreen
 import com.navher.myapplication.ui.theme.MyApplicationTheme
 import com.navher.myapplication.utils.BarcodeScanner
-import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.DataService
-import com.navher.myapplication.utils.ModuleInstallManager
-import com.navher.myapplication.utils.ModuleInstallManager.moduleInstallClient
-import com.navher.myapplication.utils.ModuleInstallManager.moduleInstallRequest
 import com.navher.myapplication.viewmodels.AuthViewModel
 import com.navher.myapplication.viewmodels.AuthViewModelFactory
 import com.navher.myapplication.viewmodels.ProductsViewModel
@@ -37,6 +34,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var productsViewModel: ProductsViewModel
     private var searchQuery by mutableStateOf("")
     private lateinit var authViewModel: AuthViewModel
+    private var shouldStartScanner by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +45,10 @@ class MainActivity : ComponentActivity() {
         productsViewModel = ViewModelProvider(this, factory)[ProductsViewModel::class.java]
         val authFactory = AuthViewModelFactory(dataService)
         authViewModel = ViewModelProvider(this, authFactory)[AuthViewModel::class.java]
-        ModuleInstallManager.initialize(this)
-        BarcodeScanner.initialize(this)
-        moduleInstallClient.installModules(moduleInstallRequest)
+
         handleIntent(intent)
         enableEdgeToEdge()
+
         setContent {
             MyApplicationTheme {
                 MyApp()
@@ -62,16 +59,16 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         // Handle the new intent (e.g., when the activity is already running)
         handleIntent(intent)
     }
 
     private fun handleIntent(intent: Intent) {
         // Check if we need to start the scanner (from QS Tile or any other source)
-        if (intent.getBooleanExtra("START_SCANNER", false))
-            // Start the scanner directly
-            startScan(onQueryChange = { searchQuery = it })
-
+        if (intent.getBooleanExtra("START_SCANNER", false)) {
+            shouldStartScanner = true
+        }
     }
     @Composable
     fun MyApp() {
@@ -81,12 +78,9 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(Unit) {
             authViewModel.checkSession {
                 startDestination = "main"
-
-
                 productsViewModel.loadProducts()
             }
             if (startDestination == null) {
-
                 startDestination = "login"
             }
         }
@@ -94,6 +88,21 @@ class MainActivity : ComponentActivity() {
         startDestination?.let { start ->
             NavHost(navController = navController, startDestination = start) {
                 composable("main") {
+                    // Initialize BarcodeScanner once we're in the main screen
+                    LaunchedEffect(Unit) {
+                        BarcodeScanner.initialize(navController)
+                    }
+
+                    // Handle scanner intent from Quick Settings Tile
+                    LaunchedEffect(shouldStartScanner) {
+                        if (shouldStartScanner) {
+                            BarcodeScanner.startScan { query ->
+                                searchQuery = query
+                            }
+                            shouldStartScanner = false
+                        }
+                    }
+
                     MainScreen(
                         productsViewModel = productsViewModel,
                         searchQuery = searchQuery,
@@ -102,6 +111,9 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable("settings") { SettingsScreen(navController) }
+                composable("barcode_scanner") {
+                    BarcodeScannerScreen()
+                }
                 composable("login") {
                     LoginScreen(
                         authViewModel = authViewModel,

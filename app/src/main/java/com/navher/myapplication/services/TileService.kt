@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.navher.myapplication.MainActivity
-import com.navher.myapplication.utils.BarcodeScanner
 
 @Suppress("DEPRECATION")
 class TileService : TileService() {
@@ -15,8 +14,6 @@ class TileService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        // Inicializar el escáner si no está inicializado
-        if (!BarcodeScanner.initialized) BarcodeScanner.initialize(this)
 
         // Crear un intent para iniciar la MainActivity
         val intent = Intent(this, MainActivity::class.java).apply {
