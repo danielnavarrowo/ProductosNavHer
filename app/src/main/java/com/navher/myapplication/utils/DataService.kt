@@ -38,11 +38,20 @@ class DataService(private val context: Context) {
         supabaseUrl = BuildConfig.SUPABASE_URL,
         supabaseKey = BuildConfig.SUPABASE_KEY
     ) {
-        install(Postgrest)
-        install(Auth)
+        install(Postgrest) {
+
+        }
+
+        install(Auth) {
+            autoLoadFromStorage = true
+            alwaysAutoRefresh = false
+            autoSaveToStorage = true
+
+        }
     }
 
     val auth = supabaseClient.auth
+
 
     suspend fun sendOTP(email: String): Result<Unit> {
         return try {
@@ -80,6 +89,17 @@ class DataService(private val context: Context) {
         return auth.currentSessionOrNull() != null
     }
 
+    // Función para refrescar el token de sesión
+    suspend fun refreshSession(): Boolean {
+        return try {
+            auth.refreshCurrentSession()
+            true
+        } catch (e: Exception) {
+            println("Error refreshing session: ${e.message}")
+            false
+        }
+    }
+
     // Función para cerrar sesión
     suspend fun signOut() {
         auth.signOut()
@@ -89,6 +109,11 @@ class DataService(private val context: Context) {
     //Function to check if there is any data in the cache, and return it if it up to date.
     //If not, it will fetch the data from the API and save it to the cache.
     suspend fun getProductsList(): List<Products> {
+        // Refrescar sesión antes de hacer solicitudes
+        if (isUserLoggedIn()) {
+            refreshSession()
+        }
+
         val cachedProducts = getCachedProductsList()
         val cachedDate = getCachedLastUpdate()
         if (!isInternetAvailable(context)) {

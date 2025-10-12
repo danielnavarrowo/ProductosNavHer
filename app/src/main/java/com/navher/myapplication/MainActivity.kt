@@ -81,11 +81,12 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(Unit) {
             authViewModel.checkSession {
                 startDestination = "main"
-                println("User is logged in, from main activity")
+
+
                 productsViewModel.loadProducts()
             }
             if (startDestination == null) {
-                println("User is not logged in, from main activity")
+
                 startDestination = "login"
             }
         }
