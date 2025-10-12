@@ -96,8 +96,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.5.0-alpha04")
+    implementation("androidx.compose.material3:material3-android:1.5.0-alpha06")
     implementation(libs.androidx.datastore.core.android)
+    //implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
     implementation(libs.androidx.foundation.android)
     implementation(libs.play.services.base)

@@ -11,7 +11,7 @@ appcompat = "1.7.1"
 material = "1.13.0"
 
 activityCompose = "1.11.0"
-composeBom = "2025.09.01"
+composeBom = "2025.10.00"
 
 playServicesCodeScanner = "16.1.0"
 supabase = "3.2.4"
@@ -21,9 +21,9 @@ datastoreCoreAndroid = "1.1.7"
 
 playServicesBase = "18.9.0"
 playServicesTfliteJava = "16.4.0"
-uiTextGoogleFonts = "1.9.2"
+uiTextGoogleFonts = "1.9.3"
 desugarJdkLibs = "2.1.5"
-foundation = "1.9.2"
+foundation = "1.9.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,8 +53,8 @@ supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version
 ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.3.0" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.9.2" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.9.2" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.9.3" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.9.3" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
