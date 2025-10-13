@@ -56,7 +56,7 @@ import java.util.concurrent.Executors
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun BarcodeScannerScreen() {
+fun BarcodeScannerScreen(barcodeScanner: BarcodeScanner) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
     LaunchedEffect(Unit) {
@@ -67,18 +67,18 @@ fun BarcodeScannerScreen() {
 
     when {
         cameraPermissionState.status.isGranted -> {
-            CameraPreviewScreen()
+            CameraPreviewScreen(barcodeScanner)
         }
         cameraPermissionState.status.shouldShowRationale -> {
             PermissionRationaleScreen(
                 onRequestPermission = { cameraPermissionState.launchPermissionRequest() },
-                onCancel = { BarcodeScanner.cancelScan() }
+                onCancel = { barcodeScanner.cancelScan() }
             )
         }
         else -> {
             PermissionDeniedScreen(
                 onRequestPermission = { cameraPermissionState.launchPermissionRequest() },
-                onCancel = { BarcodeScanner.cancelScan() }
+                onCancel = { barcodeScanner.cancelScan() }
             )
         }
     }
@@ -86,7 +86,7 @@ fun BarcodeScannerScreen() {
 
 @androidx.annotation.OptIn(ExperimentalGetImage::class)
 @Composable
-fun CameraPreviewScreen() {
+fun CameraPreviewScreen(barcodeScanner: BarcodeScanner) {
     val context = LocalContext.current
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -130,7 +130,7 @@ fun CameraPreviewScreen() {
 
                     .build()
 
-                val barcodeScanner = BarcodeScanning.getClient(options)
+                val mlkitBarcodeScanner = BarcodeScanning.getClient(options)
 
                 val imageAnalysis = ImageAnalysis.Builder()
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -146,7 +146,7 @@ fun CameraPreviewScreen() {
                                     )
 
                                     isProcessing = true
-                                    barcodeScanner.process(image)
+                                    mlkitBarcodeScanner.process(image)
                                         .addOnSuccessListener { barcodes ->
                                             for (barcode in barcodes) {
                                                 when (barcode.valueType) {
@@ -156,7 +156,7 @@ fun CameraPreviewScreen() {
                                                     Barcode.TYPE_UNKNOWN -> {
                                                         val rawValue = barcode.rawValue?.trimStart('0') ?: ""
                                                         if (rawValue.isNotEmpty()) {
-                                                            BarcodeScanner.onBarcodeScanned(rawValue)
+                                                            barcodeScanner.onBarcodeScanned(rawValue)
                                                             cameraProvider.unbindAll()
                                                             return@addOnSuccessListener
                                                         }
@@ -372,4 +372,3 @@ fun PermissionDeniedScreen(
         }
     }
 }
-

@@ -2,25 +2,22 @@ package com.navher.myapplication.utils
 
 import androidx.navigation.NavController
 
-object BarcodeScanner {
-    private var navController: NavController? = null
+// Convertir de object a clase regular para evitar fugas de memoria
+class BarcodeScanner(private val navController: NavController) {
     private var onScanCallback: ((String) -> Unit)? = null
-
-    fun initialize(nav: NavController) {
-        navController = nav
-    }
 
     fun startScan(onQueryChange: (String) -> Unit) {
         onScanCallback = onQueryChange
-        navController?.navigate("barcode_scanner")
+        navController.navigate("barcode_scanner")
     }
 
     fun onBarcodeScanned(barcode: String) {
         onScanCallback?.invoke(barcode)
-        navController?.popBackStack()
+        navController.popBackStack()
     }
 
     fun cancelScan() {
-        navController?.popBackStack()
+        navController.popBackStack()
     }
+
 }
