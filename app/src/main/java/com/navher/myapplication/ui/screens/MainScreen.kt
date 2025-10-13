@@ -41,7 +41,6 @@ import com.navher.myapplication.ui.components.LastUpdate
 import com.navher.myapplication.ui.components.ProductCard
 import com.navher.myapplication.ui.components.ScannerButton
 import com.navher.myapplication.ui.components.SearchBar
-import com.navher.myapplication.utils.BarcodeScanner
 import com.navher.myapplication.viewmodels.ProductsViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
@@ -50,8 +49,7 @@ fun MainScreen(
     productsViewModel: ProductsViewModel,
     searchQuery: String,
     onQueryChange: (String) -> Unit,
-    navController: NavController,
-    barcodeScanner: BarcodeScanner
+    navController: NavController
 ) {
     val productsList by productsViewModel.products.collectAsState()
     val isLoading by productsViewModel.isLoading.collectAsState()
@@ -101,7 +99,7 @@ fun MainScreen(
                             .weight(.85f)
                             .fillMaxHeight()
                     )
-                    ScannerButton(barcodeScanner, onQueryChange)
+                    ScannerButton(onQueryChange)
                 }
                 Spacer(modifier = Modifier.size(16.dp))
                 LastUpdate(updateDate, navController)

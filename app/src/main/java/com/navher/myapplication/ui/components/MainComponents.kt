@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.navher.myapplication.R
-import com.navher.myapplication.utils.BarcodeScanner
+import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.Products
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +73,7 @@ private const val SLIDER_VISIBLE_RANGE_MAX = 20f // Rango visible del slider (pu
 private const val SLIDER_VISIBLE_STEPS = 19 // Pasos para el rango visible del slider
 
 @Composable
-fun RowScope.ScannerButton(barcodeScanner: BarcodeScanner, onQueryChange: (String) -> Unit) {
+fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
     IconButton(
         modifier = Modifier
             .weight(.16f)
@@ -81,7 +81,7 @@ fun RowScope.ScannerButton(barcodeScanner: BarcodeScanner, onQueryChange: (Strin
             .fillMaxHeight(),
 
         onClick = {
-            barcodeScanner.startScan(onQueryChange)
+            startScan(onQueryChange)
         },
         colors = iconButtonVibrantColors().copy(
             containerColor = MaterialTheme.colorScheme.tertiary,
