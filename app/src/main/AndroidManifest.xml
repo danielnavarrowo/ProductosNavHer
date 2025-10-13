@@ -24,7 +24,7 @@
             android:name=".services.TileService"
             android:exported="true"
             android:label="Escanear código"
-            android:icon="@drawable/barcode"
+            android:icon="@drawable/scan_barcode"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -53,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner.startScan
@@ -88,8 +90,8 @@ fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
         shape = RoundedCornerShape(16.dp),
     ) {
         Icon(
-            modifier = Modifier.padding(12.dp),
-            painter = painterResource(id = R.drawable.barcode),
+            modifier = Modifier.padding(12.dp).size(28.dp),
+            painter = painterResource(id = R.drawable.scan_barcode),
             contentDescription = stringResource(R.string.barcode_scanner_cd)
         )
     }
@@ -197,8 +199,9 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                         }
                     }
                 },
-                textStyle = MaterialTheme.typography.headlineSmall.copy(
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    fontSize = 22.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Black
                 ),
@@ -281,6 +284,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 }
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier) {
     TextField(
@@ -291,11 +295,9 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         placeholder = {
             Text(
                 text = stringResource(R.string.search_products_placeholder),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Black,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 ),
-
             )
         },
         leadingIcon = { Icon(painter = painterResource(R.drawable.search), contentDescription = null) }, // Descripción podría ser stringResource(R.string.search_icon_cd)
@@ -307,9 +309,10 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
                     }
                 ) {
                     Icon(
-                       painter = painterResource(R.drawable.close),
+                       painter = painterResource(R.drawable.add),
                         contentDescription = stringResource(R.string.clear_search_cd),
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.rotate(45f)
                     )
                 }
             }
@@ -323,8 +326,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
         textStyle = MaterialTheme.typography.bodyLarge.copy(
-            fontWeight = FontWeight.Black,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         ),
     )
 }
@@ -409,7 +411,8 @@ fun ProductCard(
                     Text(
                         text = product.descripcion,
                         style = MaterialTheme.typography.bodyLarge.copy(
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 15.sp
                         ),
                         textAlign = TextAlign.Start,
                         maxLines = 2,
@@ -455,7 +458,9 @@ fun ProductCard(
                             label = stringResource(R.string.sale_label), // SUGGESTION: stringResource
                             value = product.pventa * multiplier,
                             color = MaterialTheme.colorScheme.onSurface, // Color específico para Venta
-                            style = MaterialTheme.typography.titleLarge, // Estilo específico para Venta
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = 22.sp, // Tamaño de fuente más grande
+                            ), // Estilo específico para Venta
                             fontWeight = FontWeight.Black,
                             modifier = Modifier.weight(1f),
                         )

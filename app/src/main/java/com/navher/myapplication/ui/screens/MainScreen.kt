@@ -132,7 +132,7 @@ fun MainScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.error_48px),
+                                painter = painterResource(R.drawable.info),
                                 contentDescription = "No se encontró el producto.",
                                 tint = MaterialTheme.colorScheme.surfaceTint,
                                 modifier = Modifier

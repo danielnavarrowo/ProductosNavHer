@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -226,48 +227,38 @@ fun CameraPreviewScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
         ) {
-
-            // Flash toggle button
-            IconButton(
-                onClick = { isFlashEnabled = !isFlashEnabled },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.highlight),
-                    contentDescription = "Encender flash",
-                    tint =  MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-
-            // Instructions
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(32.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.barcode),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(48.dp)
-                )
+                IconButton(
+                    onClick = { isFlashEnabled = !isFlashEnabled },
+                ) {
+                    Icon(
+                        painter = painterResource(
+                        if (isFlashEnabled) R.drawable.flash_solid else R.drawable.flash),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        contentDescription = "Encender flash",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Apunta la cámara al código de barras",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Thin
                 )
             }
         }
@@ -290,7 +281,7 @@ fun PermissionRationaleScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource(R.drawable.barcode),
+                painter = painterResource(R.drawable.scan_barcode),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(96.dp)
@@ -344,7 +335,7 @@ fun PermissionDeniedScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource(R.drawable.error_48px),
+                painter = painterResource(R.drawable.info),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.size(96.dp)

@@ -26,10 +26,12 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.then
+import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -118,11 +120,10 @@ fun LoginScreen (authViewModel: AuthViewModel,
         ) {
             Text(
                 text = "Introduce tu correo electrónico",
-                style = MaterialTheme.typography.displayLargeEmphasized.copy(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.displayLarge.copy(
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                    fontSize = 64.sp
                 ),
-                fontWeight = androidx.compose.ui.text.font.FontWeight.Thin,
-
             )
 
             OutlinedTextField(
@@ -163,12 +164,14 @@ fun LoginScreen (authViewModel: AuthViewModel,
             }
 
             if (isLoading) {
-                LoadingIndicator(
-                    modifier = Modifier.size(48.dp)
+                ContainedLoadingIndicator(
+                    modifier = Modifier.size(64.dp),
+
+
                 )
             }
 
-            Spacer(modifier = Modifier.height(112.dp))
+            Spacer(modifier = Modifier.height(if (otpSent) 12.dp else 136.dp))
 
             AnimatedVisibility(
                 visible = otpSent,
@@ -179,13 +182,9 @@ fun LoginScreen (authViewModel: AuthViewModel,
                     otpValue
                 )
             }
-
-
         }
-
     }
 }
-
 @Composable
 fun OTPForm(otpValue: TextFieldState) {
 
@@ -199,6 +198,7 @@ fun OTPForm(otpValue: TextFieldState) {
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.onBackground
             ),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
         BasicTextField(
             state = otpValue,
@@ -224,7 +224,10 @@ fun OTPForm(otpValue: TextFieldState) {
                             ) {
                             Text(
                                 text = char,
-                                style = MaterialTheme.typography.headlineMedium
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontSize = 24.sp,
+                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                                )
                             )
                         }
                     }
@@ -232,7 +235,7 @@ fun OTPForm(otpValue: TextFieldState) {
             }
         )
 
-        Spacer(modifier = Modifier.height(112.dp))
+        Spacer(modifier = Modifier.height(136.dp))
     }
 }
 
