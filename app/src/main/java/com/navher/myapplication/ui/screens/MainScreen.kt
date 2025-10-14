@@ -99,7 +99,7 @@ fun MainScreen(
                             .weight(.85f)
                             .fillMaxHeight()
                     )
-                    ScannerButton(onQueryChange)
+                    ScannerButton(navController, onQueryChange)
                 }
                 Spacer(modifier = Modifier.size(16.dp))
                 LastUpdate(updateDate, navController)

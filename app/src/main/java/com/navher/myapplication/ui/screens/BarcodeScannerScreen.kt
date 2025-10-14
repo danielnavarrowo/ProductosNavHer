@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -53,10 +55,11 @@ import com.google.mlkit.vision.common.InputImage
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner
 import java.util.concurrent.Executors
+import androidx.compose.ui.tooling.preview.Preview as ComposePreview
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun BarcodeScannerScreen() {
+fun BarcodeScannerScreen(navController: NavController) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
     LaunchedEffect(Unit) {
@@ -67,18 +70,18 @@ fun BarcodeScannerScreen() {
 
     when {
         cameraPermissionState.status.isGranted -> {
-            CameraPreviewScreen()
+            CameraPreviewScreen(navController)
         }
         cameraPermissionState.status.shouldShowRationale -> {
             PermissionRationaleScreen(
                 onRequestPermission = { cameraPermissionState.launchPermissionRequest() },
-                onCancel = { BarcodeScanner.cancelScan() }
+                onCancel = { BarcodeScanner.cancelScan(navController) }
             )
         }
         else -> {
-            PermissionDeniedScreen(
+            PermissionRationaleScreen(
                 onRequestPermission = { cameraPermissionState.launchPermissionRequest() },
-                onCancel = { BarcodeScanner.cancelScan() }
+                onCancel = { BarcodeScanner.cancelScan(navController) }
             )
         }
     }
@@ -86,7 +89,7 @@ fun BarcodeScannerScreen() {
 
 @androidx.annotation.OptIn(ExperimentalGetImage::class)
 @Composable
-fun CameraPreviewScreen() {
+fun CameraPreviewScreen(navController: NavController) {
     val context = LocalContext.current
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -156,7 +159,7 @@ fun CameraPreviewScreen() {
                                                     Barcode.TYPE_UNKNOWN -> {
                                                         val rawValue = barcode.rawValue?.trimStart('0') ?: ""
                                                         if (rawValue.isNotEmpty()) {
-                                                            BarcodeScanner.onBarcodeScanned(rawValue)
+                                                            BarcodeScanner.onBarcodeScanned(navController, rawValue)
                                                             cameraProvider.unbindAll()
                                                             return@addOnSuccessListener
                                                         }
@@ -273,20 +276,21 @@ fun PermissionRationaleScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(32.dp),
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(64.dp))
             Icon(
-                painter = painterResource(R.drawable.scan_barcode),
+                painter = painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(96.dp)
+                modifier = Modifier.size(112.dp)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Permiso de cámara requerido",
                 style = MaterialTheme.typography.headlineMedium,
@@ -296,80 +300,38 @@ fun PermissionRationaleScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Esta aplicación necesita acceso a la cámara para escanear códigos de barras.",
+                text = "Se necesita acceso a la cámara para escanear códigos de barras.",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Button(
-                onClick = onRequestPermission,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Conceder permiso")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = onCancel,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Cancelar")
-            }
-        }
-    }
-}
-
-@Composable
-fun PermissionDeniedScreen(
-    onRequestPermission: () -> Unit,
-    onCancel: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(32.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.info),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(96.dp)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Permiso de cámara denegado",
-                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Por favor, concede el permiso de cámara en la configuración de la aplicación para usar el escáner de códigos de barras.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(64.dp))
             Button(
                 onClick = onRequestPermission,
-                modifier = Modifier.fillMaxWidth()
+                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                modifier = Modifier.fillMaxWidth().height(64.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
-                Text("Intentar de nuevo")
+                Text("Conceder permiso", color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.bodyLarge)
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Button(
                 onClick = onCancel,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().height(64.dp),
+                shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                //border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.errorContainer)
             ) {
-                Text("Cancelar")
+                Text("Cancelar", color = MaterialTheme.colorScheme.onErrorContainer, style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
 }
-
+@ComposePreview
+@Composable
+fun PreviewPermissionRationaleScreen() {
+    PermissionRationaleScreen(
+        onRequestPermission = {},
+        onCancel = {}
+    )
+}

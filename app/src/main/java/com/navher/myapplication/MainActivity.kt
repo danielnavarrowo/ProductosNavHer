@@ -88,15 +88,10 @@ class MainActivity : ComponentActivity() {
         startDestination?.let { start ->
             NavHost(navController = navController, startDestination = start) {
                 composable("main") {
-                    // Initialize BarcodeScanner once we're in the main screen
-                    LaunchedEffect(Unit) {
-                        BarcodeScanner.initialize(navController)
-                    }
-
                     // Handle scanner intent from Quick Settings Tile
                     LaunchedEffect(shouldStartScanner) {
                         if (shouldStartScanner) {
-                            BarcodeScanner.startScan { query ->
+                            BarcodeScanner.startScan(navController) { query ->
                                 searchQuery = query
                             }
                             shouldStartScanner = false
@@ -112,7 +107,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("settings") { SettingsScreen(navController) }
                 composable("barcode_scanner") {
-                    BarcodeScannerScreen()
+                    BarcodeScannerScreen(navController)
                 }
                 composable("login") {
                     LoginScreen(

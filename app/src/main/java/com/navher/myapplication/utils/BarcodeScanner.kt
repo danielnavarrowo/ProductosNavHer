@@ -3,24 +3,19 @@ package com.navher.myapplication.utils
 import androidx.navigation.NavController
 
 object BarcodeScanner {
-    private var navController: NavController? = null
     private var onScanCallback: ((String) -> Unit)? = null
 
-    fun initialize(nav: NavController) {
-        navController = nav
-    }
-
-    fun startScan(onQueryChange: (String) -> Unit) {
+    fun startScan(navController: NavController, onQueryChange: (String) -> Unit) {
         onScanCallback = onQueryChange
-        navController?.navigate("barcode_scanner")
+        navController.navigate("barcode_scanner")
     }
 
-    fun onBarcodeScanned(barcode: String) {
+    fun onBarcodeScanned(navController: NavController, barcode: String) {
         onScanCallback?.invoke(barcode)
-        navController?.popBackStack()
+        navController.popBackStack()
     }
 
-    fun cancelScan() {
-        navController?.popBackStack()
+    fun cancelScan(navController: NavController) {
+        navController.popBackStack()
     }
 }

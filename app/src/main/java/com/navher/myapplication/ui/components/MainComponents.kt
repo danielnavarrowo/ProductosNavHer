@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -73,7 +74,7 @@ private const val SLIDER_VISIBLE_RANGE_MAX = 20f // Rango visible del slider (pu
 private const val SLIDER_VISIBLE_STEPS = 19 // Pasos para el rango visible del slider
 
 @Composable
-fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
+fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String) -> Unit) {
     IconButton(
         modifier = Modifier
             .weight(.16f)
@@ -81,11 +82,11 @@ fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
             .fillMaxHeight(),
 
         onClick = {
-            startScan(onQueryChange)
+            startScan(navController, onQueryChange)
         },
-        colors = iconButtonVibrantColors().copy(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.onTertiary,
+        colors = iconButtonVibrantColors(
+            containerColor = MaterialTheme.colorScheme.tertiaryFixedDim,
+            contentColor = MaterialTheme.colorScheme.onTertiaryFixed,
         ),
         shape = RoundedCornerShape(16.dp),
     ) {
@@ -102,13 +103,15 @@ fun RowScope.ScannerButton(onQueryChange: (String) -> Unit) {
 fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
     Box(
         modifier = Modifier
+
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(8.dp)
             )
+            .clickable { navController.navigate("settings") }
             .padding(horizontal = 8.dp, vertical = 3.dp)
             .align(Alignment.CenterHorizontally)
-            .clickable { navController.navigate("settings") }
+
     ) {
         Text(
             text = stringResource(R.string.last_update_prefix, updateDate ),
@@ -322,7 +325,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
         textStyle = MaterialTheme.typography.bodyLarge.copy(
@@ -521,3 +524,4 @@ private fun PriceText(
         )
     }
 }
+
