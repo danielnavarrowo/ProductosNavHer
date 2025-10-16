@@ -135,7 +135,7 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
-    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.4")
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.5")
 
     // Añadir dependencia de desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)

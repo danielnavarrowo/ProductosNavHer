@@ -21,7 +21,7 @@ val bodyFontFamily = FontFamily(
 
 val displayFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Merriweather"),
+        googleFont = GoogleFont("Archivo Black"),
         fontProvider = provider,
     )
 )

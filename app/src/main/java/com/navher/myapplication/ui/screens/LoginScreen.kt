@@ -100,7 +100,7 @@ fun LoginScreen (authViewModel: AuthViewModel,
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             modifier = Modifier
-                                .size(36.dp)
+                                .size(28.dp)
                                 .rotate(180f)
                         )
                     }

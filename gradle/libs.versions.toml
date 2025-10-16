@@ -13,7 +13,7 @@ material = "1.13.0"
 activityCompose = "1.11.0"
 composeBom = "2025.10.00"
 
-supabase = "3.2.4"
+supabase = "3.2.5"
 coilCompose = "2.7.0"
 
 

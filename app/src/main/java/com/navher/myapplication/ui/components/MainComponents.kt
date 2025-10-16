@@ -122,6 +122,7 @@ fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
     }
 }
 
+
 @Composable
 fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
     var sliderPosition by remember { mutableIntStateOf(initialValue.coerceIn(SLIDER_MIN_VALUE, SLIDER_MAX_VALUE)) }
