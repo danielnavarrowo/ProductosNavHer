@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -77,9 +79,8 @@ private const val SLIDER_VISIBLE_STEPS = 19 // Pasos para el rango visible del s
 fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String) -> Unit) {
     IconButton(
         modifier = Modifier
-            .weight(.16f)
             .align(Alignment.CenterVertically)
-            .fillMaxHeight(),
+            .size(56.dp),
 
         onClick = {
             startScan(navController, onQueryChange)
@@ -91,7 +92,7 @@ fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String)
         shape = RoundedCornerShape(16.dp),
     ) {
         Icon(
-            modifier = Modifier.padding(12.dp).size(28.dp),
+            modifier = Modifier.padding(16.dp).size(56.dp),
             painter = painterResource(id = R.drawable.scan_barcode),
             contentDescription = stringResource(R.string.barcode_scanner_cd)
         )
@@ -142,7 +143,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
-    ) {
+        ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth().height(46.dp),
@@ -240,7 +241,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                                     // Esperar un poco antes de iniciar el incremento rápido
                                     delay(500)
                                     while (isActive && sliderPosition < 500) {
-                                       updateValue(sliderPosition + 1)
+                                        updateValue(sliderPosition + 1)
                                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                                         delay(80) // Controla la velocidad de incremento
                                     }
@@ -291,48 +292,72 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier) {
-    TextField(
-        value = query,
-        onValueChange = onQueryChange,
+    Box(
         modifier = modifier
-            .fillMaxWidth(),
-        placeholder = {
-            Text(
-                text = stringResource(R.string.search_products_placeholder),
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                ),
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(
+                color = if (query.isNotEmpty())
+                    MaterialTheme.colorScheme.surfaceContainerLowest
+                else
+                    MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(24.dp)
             )
-        },
-        leadingIcon = { Icon(painter = painterResource(R.drawable.search), contentDescription = null) }, // Descripción podría ser stringResource(R.string.search_icon_cd)
-        trailingIcon = {
+            .padding(start = 8.dp, end = 8.dp),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                if (query.isEmpty()) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.search_products_placeholder),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                BasicTextField(
+                    value = query,
+                    onValueChange = onQueryChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
+                    singleLine = true
+                )
+            }
+
             if (query.isNotEmpty()) {
                 IconButton(
-                    onClick = {
-                        onQueryChange("")
-                    }
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceContainer,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(4.dp),
+                    onClick = { onQueryChange("") }
                 ) {
                     Icon(
-                       painter = painterResource(R.drawable.add),
+                        painter = painterResource(R.drawable.add),
                         contentDescription = stringResource(R.string.clear_search_cd),
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.rotate(45f)
                     )
                 }
             }
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(24.dp),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            unfocusedContainerColor = MaterialTheme.colorScheme.background,
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            ),
-        textStyle = MaterialTheme.typography.bodyLarge.copy(
-            color = MaterialTheme.colorScheme.onSurface,
-        ),
-    )
+        }
+    }
 }
 
 
@@ -429,7 +454,7 @@ fun ProductCard(
                         shape = RoundedCornerShape(16.dp)
                     ).padding(horizontal = 6.dp, vertical = 3.dp),
                     text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
-                     // Mantenido el peso
+                    // Mantenido el peso
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -513,7 +538,7 @@ private fun PriceText(
             fontWeight = fontWeight,
             textAlign = TextAlign.Center,
 
-        )
+            )
         Spacer(modifier = Modifier.height(3.dp))
         Text(
             text = formattedValue,
@@ -522,7 +547,6 @@ private fun PriceText(
             fontWeight = fontWeight,
             textAlign = TextAlign.Center,
 
-        )
+            )
     }
 }
-

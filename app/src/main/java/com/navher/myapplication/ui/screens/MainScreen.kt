@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -89,15 +91,30 @@ fun MainScreen(
             ) {
                 Row(
                     modifier = Modifier
-                        .requiredHeight(56.dp),
+                        .requiredHeight(56.dp).fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
+                    Icon(
+                        modifier = Modifier
+
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryFixedDim,
+                                shape = RoundedCornerShape(50)
+                            )
+
+                        .size(56.dp)
+                            .padding(16.dp),
+                        painter = painterResource(R.drawable.search),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryFixed,
+
+
+                    )
                     SearchBar(
                         query = searchQuery,
                         onQueryChange,
                         modifier = Modifier
-                            .weight(.85f)
-                            .fillMaxHeight()
+                            .weight(1f)
                     )
                     ScannerButton(navController, onQueryChange)
                 }
@@ -141,7 +158,7 @@ fun MainScreen(
                             Spacer(modifier = Modifier.size(25.dp))
                             Text(
                                 text = "No se encontró el producto.",
-                                style = MaterialTheme.typography.displayLarge,
+                                style = MaterialTheme.typography.displayMedium,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.Black,
