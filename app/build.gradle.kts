@@ -96,7 +96,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.5.0-alpha06")
+    implementation("androidx.compose.material3:material3-android:1.5.0-alpha07")
     implementation(libs.androidx.datastore.core.android)
 
     // MLKit Barcode Scanning (bundled)

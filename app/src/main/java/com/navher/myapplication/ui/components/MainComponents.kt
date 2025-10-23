@@ -5,6 +5,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,27 +14,26 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonGroup
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconButtonDefaults.iconButtonVibrantColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,6 +50,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -62,11 +64,8 @@ import androidx.navigation.NavController
 import com.navher.myapplication.R
 import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.Products
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.roundToInt
 
 
@@ -124,169 +123,244 @@ fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
 }
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
-    var sliderPosition by remember { mutableIntStateOf(initialValue.coerceIn(SLIDER_MIN_VALUE, SLIDER_MAX_VALUE)) }
+    var sliderPosition by remember {
+        mutableIntStateOf(
+            initialValue.coerceIn(
+                SLIDER_MIN_VALUE,
+                SLIDER_MAX_VALUE
+            )
+        )
+    }
     var textValue by remember { mutableStateOf(sliderPosition.toString()) }
     val haptic = LocalHapticFeedback.current
     var previousStep by remember { mutableIntStateOf(sliderPosition) }
 
     fun updateValue(newValue: Int) {
         sliderPosition = newValue
-        textValue = newValue.toString() // Sincronizar texto
-        onValueChange(newValue) // Notificar al exterior
+        textValue = newValue.toString()
+        onValueChange(newValue)
     }
-
-
 
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        //horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
 
-        ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth().height(46.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .weight(.25f)
-                    .fillMaxHeight()
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer.copy(.3f), shape = RoundedCornerShape(24.dp))
+        val interactionSourceMinus = remember { MutableInteractionSource() }
+        val interactionSourcePlus = remember { MutableInteractionSource() }
+        val viewConfiguration = LocalViewConfiguration.current
 
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = { offset ->
-                                // Decrementar inmediatamente una vez
-                                if (sliderPosition > 1) {
-                                    updateValue(sliderPosition - 1)
-                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                }
-                                // Detectar presión continua
-                                val job = CoroutineScope(Dispatchers.Main).launch {
-                                    // Esperar un poco antes de iniciar el decremento rápido
-                                    delay(500)
-                                    while (isActive && sliderPosition > 1) {
-                                        updateValue(sliderPosition - 1)
-                                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                        delay(80) // Controla la velocidad de decremento
-                                    }
-                                }
-                                // Esperar hasta que se levante el dedo o se cancele
-                                tryAwaitRelease()
-                                job.cancel()
-                            }
-                        )
-                    }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.remove),
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    contentDescription = "Menos",
-                    modifier = Modifier.align(Alignment.Center).size(32.dp)
-                )
-            }
+        LaunchedEffect(interactionSourceMinus) {
+            var isLongClick = false
 
-            BasicTextField(
-                value = textValue,
-                onValueChange = { newValue ->
-                    if (newValue.isEmpty()) {
-                        sliderPosition = 1
-                        textValue = ""
-                        onValueChange(1) // Notificar al exterior
-                    }
-
-                    else {
-                        newValue.toIntOrNull()?.let { intValue ->
-                            if (intValue in 1..500) updateValue(intValue)
+            interactionSourceMinus.interactions.collectLatest { interaction ->
+                when (interaction) {
+                    is PressInteraction.Press -> {
+                        isLongClick = false
+                        delay(viewConfiguration.longPressTimeoutMillis)
+                        isLongClick = true
+                        while (sliderPosition > 1) {
+                            updateValue(sliderPosition - 1)
+                            haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                            delay(80)
                         }
                     }
-                },
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    fontSize = 22.sp,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Black
-                ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(.25f)
-                    .background(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .wrapContentSize(Alignment.Center)
-            )
 
-            // Botón de incremento con soporte para presión continua
-            Box(
-                modifier = Modifier
-                    .weight(.25f).fillMaxHeight()
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer.copy(.3f), shape = RoundedCornerShape(24.dp))
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = { offset ->
-                                // Incrementar inmediatamente una vez
-                                if (sliderPosition < 500) {
-                                    updateValue(sliderPosition + 1)
-                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                }
-
-                                // Detectar presión continua
-                                val job = CoroutineScope(Dispatchers.Main).launch {
-                                    // Esperar un poco antes de iniciar el incremento rápido
-                                    delay(500)
-                                    while (isActive && sliderPosition < 500) {
-                                        updateValue(sliderPosition + 1)
-                                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                        delay(80) // Controla la velocidad de incremento
-                                    }
-                                }
-                                // Esperar hasta que se levante el dedo o se cancele
-                                tryAwaitRelease()
-                                job.cancel()
+                    is PressInteraction.Release -> {
+                        if (!isLongClick) {
+                            if (sliderPosition > 1) {
+                                updateValue(sliderPosition - 1)
+                                haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
                             }
-                        )
+                        }
                     }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.add),
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    contentDescription = "Más",
-                    modifier = Modifier.align(Alignment.Center).size(32.dp)
-                )
+                }
             }
-
         }
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
+        LaunchedEffect(interactionSourcePlus) {
+            var isLongClick = false
 
-        Slider(
-            modifier = Modifier
-                .semantics { contentDescription = "" },
-            value = sliderPosition.toFloat(),
-            onValueChange = { newValueFromSlider ->
-                val roundedValue = newValueFromSlider.roundToInt()
-                updateValue(roundedValue) // Actualiza estado interno y notifica
+            interactionSourcePlus.interactions.collectLatest { interaction ->
+                when (interaction) {
+                    is PressInteraction.Press -> {
+                        isLongClick = false
+                        delay(viewConfiguration.longPressTimeoutMillis)
+                        isLongClick = true
+                        while (sliderPosition < 500) {
+                            updateValue(sliderPosition + 1)
+                            haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                            delay(80)
+                        }
+                    }
 
-                // Haptic feedback específico del slider (al cambiar de paso)
-                val currentStep = roundedValue
-                if (currentStep != previousStep) {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    previousStep = currentStep
+                    is PressInteraction.Release -> {
+                        if (!isLongClick) {
+                            if (sliderPosition < 500) {
+                                updateValue(sliderPosition + 1)
+                                haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                            }
+                        }
+                    }
                 }
+            }
+        }
+
+        ButtonGroup(
+            overflowIndicator = { state ->
+                ButtonGroupDefaults.OverflowIndicator(
+                    state,
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(),
+                    modifier = Modifier.size(32.dp, 48.dp)
+                )
             },
-            valueRange = SLIDER_MIN_VALUE.toFloat()..SLIDER_VISIBLE_RANGE_MAX, // Rango visible
-            steps = SLIDER_VISIBLE_STEPS
-        )
+            //modifier = Modifier.fillMaxWidth()
+        ) {
+            customItem(
+                {
+                    FilledTonalIconButton(
+                        onClick = {},
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        shapes = IconButtonDefaults.shapes(),
+                        interactionSource = interactionSourceMinus,
+                        modifier = Modifier
+                            .size(96.dp, 48.dp)
+                            .animateWidth(interactionSourceMinus)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.remove),
+                            contentDescription = "Menos",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                },
+                { _ ->
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(
+                                painterResource(R.drawable.remove),
+                                null
+                            )
+                        },
+                        text = { Text("Hola") },
+                        onClick = {
+                            if (sliderPosition > 1) {
+                                updateValue(sliderPosition - 1)
+                                haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                            }
+                        }
+                    )
+                },
+            )
+            customItem(
+                {
+                    BasicTextField(
+                        value = textValue,
+                        onValueChange = { newValue ->
+                            if (newValue.isEmpty()) {
+                                sliderPosition = 1
+                                textValue = ""
+                                onValueChange(1) // Notificar al exterior
+                            }
+
+                            else {
+                                newValue.toIntOrNull()?.let { intValue ->
+                                    if (intValue in 1..500) updateValue(intValue)
+                                }
+                            }
+                        },
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            fontSize = 22.sp,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Black
+                        ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(48.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.secondaryContainer.copy(.5f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .wrapContentSize(Alignment.Center)
+                    )
+                },
+                {}
+            )
+
+
+            customItem(
+                {
+                    FilledTonalIconButton(
+                        onClick = {},
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        shapes = IconButtonDefaults.shapes(),
+                        interactionSource = interactionSourcePlus,
+                        modifier = Modifier
+                            .size(96.dp, 48.dp)
+
+                            .animateWidth(interactionSourcePlus)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.add),
+                            contentDescription = "Más",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                },
+                { _ ->
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(
+                                painterResource(R.drawable.add),
+                                null
+                            )
+                        },
+                        text = { Text("Hola") },
+                        onClick = {
+                            if (sliderPosition < 500) {
+                                updateValue(sliderPosition + 1)
+                                haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                            }
+                        }
+                    )
+                },
+            )
+        }
     }
+
+    Spacer(
+        modifier = Modifier.height(12.dp)
+    )
+
+    Slider(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .semantics { contentDescription = "" },
+        value = sliderPosition.toFloat(),
+        onValueChange = { newValueFromSlider ->
+            val roundedValue = newValueFromSlider.roundToInt()
+            updateValue(roundedValue) // Actualiza estado interno y notifica
+
+            val currentStep = roundedValue
+            if (currentStep != previousStep) {
+                haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+            }
+        },
+        valueRange = SLIDER_MIN_VALUE.toFloat()..SLIDER_VISIBLE_RANGE_MAX, // Rango visible
+        steps = SLIDER_VISIBLE_STEPS
+    )
 }
+
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -381,14 +455,6 @@ fun ProductCard(
             isExpanded = forceExpanded
         }
     }
-
-    // Resetea el multiplicador si la tarjeta se colapsa (funcionalidad original mantenida)
-    LaunchedEffect(isExpanded) {
-        if (!isExpanded) {
-            multiplier = 1
-        }
-    }
-
 
     Box(
         modifier = Modifier
