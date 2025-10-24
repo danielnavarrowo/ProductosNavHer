@@ -211,7 +211,7 @@ fun CameraPreviewScreen(navController: NavController) {
                             false
                         }
                     }
-                } catch (exc: Exception) {
+                } catch (_: Exception) {
                     // Handle exception
                 }
 

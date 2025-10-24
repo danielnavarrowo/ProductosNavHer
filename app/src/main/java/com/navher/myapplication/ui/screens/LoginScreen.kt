@@ -120,7 +120,7 @@ fun LoginScreen (authViewModel: AuthViewModel,
                 text = "Introduce tu correo electrónico",
                 style = MaterialTheme.typography.displayLarge.copy(
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
-                    fontSize = 64.sp
+                    fontSize = 56.sp
                 ),
             )
 
@@ -205,7 +205,7 @@ fun OTPForm(otpValue: TextFieldState) {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.NumberPassword
             ),
-            decorator = { innerTextField ->
+            decorator = { _ ->
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     repeat(6) { index ->
                         val char = otpValue.text.getOrNull(index)?.toString() ?: ""

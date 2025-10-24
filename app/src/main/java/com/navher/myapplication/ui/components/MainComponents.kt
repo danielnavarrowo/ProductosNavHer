@@ -1,7 +1,14 @@
 package com.navher.myapplication.ui.components
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -45,6 +52,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -85,8 +94,8 @@ fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String)
             startScan(navController, onQueryChange)
         },
         colors = iconButtonVibrantColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryFixedDim,
-            contentColor = MaterialTheme.colorScheme.onTertiaryFixed,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         ),
         shape = RoundedCornerShape(16.dp),
     ) {
@@ -105,7 +114,7 @@ fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
         modifier = Modifier
 
             .background(
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.surfaceBright,
                 shape = RoundedCornerShape(8.dp)
             )
             .clickable { navController.navigate("settings") }
@@ -235,7 +244,8 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                         Icon(
                             painter = painterResource(id = R.drawable.remove),
                             contentDescription = "Menos",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 },
@@ -313,7 +323,8 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                         Icon(
                             painter = painterResource(id = R.drawable.add),
                             contentDescription = "Más",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 },
@@ -365,7 +376,12 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier) {
+fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    focusRequester: FocusRequester = remember { FocusRequester() }
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -403,7 +419,9 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier
                 BasicTextField(
                     value = query,
                     onValueChange = onQueryChange,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.onSurface
                     ),
@@ -465,7 +483,7 @@ fun ProductCard(
                     else -> RoundedCornerShape(0.dp)
                 }
             )
-            .background( color= MaterialTheme.colorScheme.background
+            .background( color= MaterialTheme.colorScheme.surface
             )
             .wrapContentSize()
             .pointerInput(Unit) {
@@ -516,14 +534,14 @@ fun ProductCard(
 
                 Text(
                     modifier = Modifier.background(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = RoundedCornerShape(16.dp)
                     ).padding(horizontal = 6.dp, vertical = 3.dp),
                     text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
                     // Mantenido el peso
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     maxLines = 1,
                 )
             }
@@ -591,8 +609,6 @@ private fun PriceText(
     style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
     fontWeight: FontWeight? = null
 ) {
-    val formattedValue = "$${String.format("%.2f", value)}"
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -606,13 +622,27 @@ private fun PriceText(
 
             )
         Spacer(modifier = Modifier.height(3.dp))
-        Text(
-            text = formattedValue,
-            style = style,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = fontWeight,
-            textAlign = TextAlign.Center,
-
+        AnimatedContent(
+            targetState = value,
+            transitionSpec = {
+                if (targetState > initialState) {
+                    slideInVertically { height -> height } + fadeIn() togetherWith
+                            slideOutVertically { height -> -height } + fadeOut()
+                } else {
+                    slideInVertically { height -> -height } + fadeIn() togetherWith
+                            slideOutVertically { height -> height } + fadeOut()
+                }.using(
+                    SizeTransform(clip = false)
+                )
+            }, label = "price-transition"
+        ) { targetValue ->
+            Text(
+                text = "$${String.format("%.2f", targetValue)}",
+                style = style,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = fontWeight,
+                textAlign = TextAlign.Center,
             )
+        }
     }
 }

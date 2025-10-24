@@ -1,6 +1,7 @@
 package com.navher.myapplication.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -74,15 +76,16 @@ fun MainScreen(
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = .13f),
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             Column(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = .04f),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         shape = MaterialTheme.shapes.large
                     )
                     .statusBarsPadding()
@@ -95,9 +98,9 @@ fun MainScreen(
                 ) {
                     Icon(
                         modifier = Modifier
-
+                            .clickable { focusRequester.requestFocus() }
                             .background(
-                                color = MaterialTheme.colorScheme.primaryFixedDim,
+                                color = MaterialTheme.colorScheme.secondaryContainer,
                                 shape = RoundedCornerShape(50)
                             )
 
@@ -105,7 +108,7 @@ fun MainScreen(
                             .padding(16.dp),
                         painter = painterResource(R.drawable.search),
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryFixed,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
 
 
                     )
@@ -113,7 +116,8 @@ fun MainScreen(
                         query = searchQuery,
                         onQueryChange,
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(1f),
+                        focusRequester = focusRequester
                     )
                     ScannerButton(navController, onQueryChange)
                 }
