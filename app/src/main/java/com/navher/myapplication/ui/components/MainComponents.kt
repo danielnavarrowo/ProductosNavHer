@@ -39,6 +39,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconButtonDefaults.iconButtonVibrantColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -105,6 +106,14 @@ fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String)
             contentDescription = stringResource(R.string.barcode_scanner_cd)
         )
     }
+}
+
+@Composable
+fun FAB () {
+    MediumFloatingActionButton(
+        onClick = { productsViewModel.loadProducts() },
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+    ) { }
 }
 
 
@@ -365,6 +374,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
             val currentStep = roundedValue
             if (currentStep != previousStep) {
                 haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
+                previousStep = currentStep
             }
         },
         valueRange = SLIDER_MIN_VALUE.toFloat()..SLIDER_VISIBLE_RANGE_MAX, // Rango visible

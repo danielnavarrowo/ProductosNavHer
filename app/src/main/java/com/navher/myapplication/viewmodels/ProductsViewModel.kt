@@ -22,10 +22,26 @@ class ProductsViewModel(private val dataService: DataService) : ViewModel() {
 
     fun loadProducts() {
         viewModelScope.launch {
-            _isLoading.value = true
             try {
-                _products.value = dataService.getProductsList()
-                _updateDate.value = formatDateToSpanish(dataService.serverUpdate)
+                // Load cached data immediately
+                val cachedProducts = dataService.getCachedData()
+                val hasCachedData = cachedProducts.isNotEmpty()
+
+                if (hasCachedData) {
+                    _products.value = cachedProducts
+                    _updateDate.value = formatDateToSpanish(dataService.getCachedUpdateDate())
+                    _isLoading.value = false
+                } else {
+                    // No cached data, keep loading indicator active
+                    _isLoading.value = true
+                }
+
+                // Check for updates in the background
+                val updatedProducts = dataService.checkAndFetchUpdates()
+                if (updatedProducts != null) {
+                    _products.value = updatedProducts
+                    _updateDate.value = formatDateToSpanish(dataService.serverUpdate)
+                }
             } finally {
                 _isLoading.value = false
             }

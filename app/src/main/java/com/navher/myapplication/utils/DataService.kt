@@ -62,7 +62,8 @@ class DataService(private val context: Context) {
             Result.success(Unit)
         } catch (e: Exception) {
             if (e is io.github.jan.supabase.auth.exception.AuthRestException) {
-                return if (e.statusCode == 422) Result.failure(Exception("Este correo no está registrado. Intenta con otro correo.")) else Result.failure(Exception("Error: " + e.statusCode.toString() + " " + e.errorCode))
+                return if (e.statusCode == 422) Result.failure(Exception("Este correo no está registrado. Intenta con otro correo."))
+                else Result.failure(Exception("Error: " + e.statusCode.toString() + " " + e.errorCode))
             }
             Result.failure(e)
         }
@@ -78,7 +79,8 @@ class DataService(private val context: Context) {
             Result.success(true)
         } catch (e: Exception) {
             if (e is io.github.jan.supabase.auth.exception.AuthRestException) {
-                return if (e.statusCode == 403) Result.failure(Exception("Código no válido o expirado. Inténtalo de nuevo.")) else Result.failure(Exception("Error: " + e.statusCode.toString() + " " + e.errorCode))
+                return if (e.statusCode == 403) Result.failure(Exception("Código no válido o expirado. Inténtalo de nuevo."))
+                else Result.failure(Exception("Error: " + e.statusCode.toString() + " " + e.errorCode))
             }
             Result.failure(e)
         }
@@ -108,29 +110,65 @@ class DataService(private val context: Context) {
 
     //Function to check if there is any data in the cache, and return it if it up to date.
     //If not, it will fetch the data from the API and save it to the cache.
-    suspend fun getProductsList(): List<Products> {
-        // Refrescar sesión antes de hacer solicitudes
+//    suspend fun getProductsList(): List<Products> {
+//        // Refrescar sesión antes de hacer solicitudes
+//        if (isUserLoggedIn()) {
+//            refreshSession()
+//        }
+//
+//        val cachedProducts = getCachedProductsList()
+//        val cachedDate = getCachedLastUpdate()
+//        if (!isInternetAvailable(context)) {
+//            Toast.makeText(context, "No hay conexión a internet. Mostrando datos almacenados.", Toast.LENGTH_LONG).show()
+//            serverUpdate = cachedDate
+//            return cachedProducts
+//        }
+//        serverUpdate = fetchLastUpdate()
+//        if ( cachedProducts.isNotEmpty()
+//            && serverUpdate <= cachedDate
+//            && cachedDate != LocalDate.parse("1969-12-12")
+//            ) return cachedProducts
+//        else {
+//                val fetchedProducts = fetchProducts()
+//                saveProductsList(fetchedProducts, serverUpdate)
+//                return fetchedProducts
+//            }
+//    }
+
+    // Get cached data immediately without checking for updates
+    suspend fun getCachedData(): List<Products> {
+        return getCachedProductsList()
+    }
+
+    // Get cached update date
+    suspend fun getCachedUpdateDate(): LocalDate {
+        return getCachedLastUpdate()
+    }
+
+    // Check for updates in background and return new data if available
+    suspend fun checkAndFetchUpdates(): List<Products>? {
+        // Refresh session before making requests
         if (isUserLoggedIn()) {
             refreshSession()
         }
 
-        val cachedProducts = getCachedProductsList()
-        val cachedDate = getCachedLastUpdate()
+        // If no internet, return null (no updates available)
         if (!isInternetAvailable(context)) {
-            Toast.makeText(context, "No hay conexión a internet. Mostrando datos almacenados.", Toast.LENGTH_LONG).show()
-            serverUpdate = cachedDate
-            return cachedProducts
+            return null
         }
+
+        val cachedDate = getCachedLastUpdate()
         serverUpdate = fetchLastUpdate()
-        if ( cachedProducts.isNotEmpty()
-            && serverUpdate <= cachedDate
-            && cachedDate != LocalDate.parse("1969-12-12")
-            ) return cachedProducts
-        else {
-                val fetchedProducts = fetchProducts()
-                saveProductsList(fetchedProducts, serverUpdate)
-                return fetchedProducts
-            }
+
+        // If server data is newer, fetch and save it
+        if (serverUpdate > cachedDate || cachedDate == LocalDate.parse("1969-12-12")) {
+            val fetchedProducts = fetchProducts()
+            saveProductsList(fetchedProducts, serverUpdate)
+            return fetchedProducts
+        }
+
+        // No updates available
+        return null
     }
 
     // Fetch products from Supabase
