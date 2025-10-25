@@ -28,10 +28,11 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,6 +54,8 @@ fun MainScreen(
     navController: NavController
 ) {
     val productsList by productsViewModel.products.collectAsState()
+
+    var isLastUpdateVisible by remember { mutableStateOf(false) }
     val isLoading by productsViewModel.isLoading.collectAsState()
     val updateDate by productsViewModel.updateDate.collectAsState()
 
@@ -74,7 +77,6 @@ fun MainScreen(
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
-    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -87,7 +89,8 @@ fun MainScreen(
                         shape = MaterialTheme.shapes.large
                     )
                     .statusBarsPadding()
-                    .padding(horizontal = 52.dp, vertical = 10.dp),
+                    .padding(horizontal = 0.dp, vertical = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchBar(
                         query = searchQuery,
@@ -95,9 +98,10 @@ fun MainScreen(
                         onQueryChange,
                         modifier = Modifier
                             .fillMaxWidth(1f).requiredHeight(56.dp),
+                        onToggleLastUpdate = { isLastUpdateVisible = !isLastUpdateVisible }
                     )
                 Spacer(modifier = Modifier.size(16.dp))
-                LastUpdate(updateDate, navController)
+                LastUpdate(updateDate, navController, isVisible = isLastUpdateVisible)
             }
         },
         content = { innerPadding ->
