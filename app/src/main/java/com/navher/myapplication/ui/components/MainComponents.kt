@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,7 +40,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconButtonDefaults.iconButtonVibrantColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,8 +53,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -107,15 +105,6 @@ fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String)
         )
     }
 }
-
-@Composable
-fun FAB () {
-    MediumFloatingActionButton(
-        onClick = { productsViewModel.loadProducts() },
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-    ) { }
-}
-
 
 @Composable
 fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
@@ -388,9 +377,9 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 @Composable
 fun SearchBar(
     query: String,
+    navController: NavController,
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    focusRequester: FocusRequester = remember { FocusRequester() }
 ) {
     Box(
         modifier = modifier
@@ -402,13 +391,12 @@ fun SearchBar(
                 else
                     MaterialTheme.colorScheme.background,
                 shape = RoundedCornerShape(24.dp)
-            )
-            .padding(start = 8.dp, end = 8.dp),
+            ),
         contentAlignment = Alignment.Center
 
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize().padding(start = 52.dp, end = 0.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -430,33 +418,42 @@ fun SearchBar(
                     value = query,
                     onValueChange = onQueryChange,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                        .fillMaxWidth(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center
                     ),
-                    singleLine = true
+                    singleLine = true,
                 )
             }
 
-            if (query.isNotEmpty()) {
-                IconButton(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            shape = RoundedCornerShape(12.dp)
+            Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.height(36.dp)) {
+                if (query.isNotEmpty()) {
+                    IconButton(
+                        modifier = Modifier
+
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(12.dp)
+
+                            ).padding(4.dp)
+                            .size(26.dp),
+                        onClick = { onQueryChange("") }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.add),
+                            contentDescription = stringResource(R.string.clear_search_cd),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.rotate(45f)
                         )
-                        .padding(4.dp),
-                    onClick = { onQueryChange("") }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.add),
-                        contentDescription = stringResource(R.string.clear_search_cd),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.rotate(45f)
-                    )
+                    }
                 }
+                IconButton(
+                    onClick = { startScan(navController, onQueryChange) },
+                    modifier = Modifier.size(52.dp, 36.dp)
+                ) {}
             }
         }
     }

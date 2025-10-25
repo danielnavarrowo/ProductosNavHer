@@ -1,10 +1,8 @@
 package com.navher.myapplication.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -43,8 +40,8 @@ import androidx.navigation.NavController
 import com.navher.myapplication.R
 import com.navher.myapplication.ui.components.LastUpdate
 import com.navher.myapplication.ui.components.ProductCard
-import com.navher.myapplication.ui.components.ScannerButton
 import com.navher.myapplication.ui.components.SearchBar
+import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.viewmodels.ProductsViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
@@ -90,38 +87,15 @@ fun MainScreen(
                         shape = MaterialTheme.shapes.large
                     )
                     .statusBarsPadding()
-                    .padding(12.dp),
+                    .padding(horizontal = 52.dp, vertical = 10.dp),
             ) {
-                Row(
-                    modifier = Modifier
-                        .requiredHeight(56.dp).fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .clickable { focusRequester.requestFocus() }
-                            .background(
-                                color = MaterialTheme.colorScheme.secondaryContainer,
-                                shape = RoundedCornerShape(50)
-                            )
-
-                        .size(56.dp)
-                            .padding(16.dp),
-                        painter = painterResource(R.drawable.search),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
-
-
-                    )
-                    SearchBar(
+                SearchBar(
                         query = searchQuery,
+                        navController,
                         onQueryChange,
                         modifier = Modifier
-                            .weight(1f),
-                        focusRequester = focusRequester
+                            .fillMaxWidth(1f).requiredHeight(56.dp),
                     )
-                    ScannerButton(navController, onQueryChange)
-                }
                 Spacer(modifier = Modifier.size(16.dp))
                 LastUpdate(updateDate, navController)
             }
@@ -189,7 +163,7 @@ fun MainScreen(
                             }
 
                             item {
-                                Spacer(modifier = Modifier.navigationBarsPadding())
+                                Spacer(modifier = Modifier.navigationBarsPadding().height(108.dp))
                             }
 
                         }
@@ -198,7 +172,18 @@ fun MainScreen(
             }
         },
         floatingActionButton = {
-
+            MediumFloatingActionButton(
+                onClick = { startScan(navController, onQueryChange) },
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                modifier = Modifier.navigationBarsPadding()
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.scan_barcode),
+                    modifier = Modifier.size(36.dp),
+                    contentDescription = "Iniciar escáner",
+                )
+            }
         }
     )
 }
