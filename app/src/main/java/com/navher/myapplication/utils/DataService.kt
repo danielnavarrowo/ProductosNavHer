@@ -1,6 +1,5 @@
 package com.navher.myapplication.utils
 import android.content.Context
-import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -100,11 +99,6 @@ class DataService(private val context: Context) {
             println("Error refreshing session: ${e.message}")
             false
         }
-    }
-
-    // Función para cerrar sesión
-    suspend fun signOut() {
-        auth.signOut()
     }
 
 

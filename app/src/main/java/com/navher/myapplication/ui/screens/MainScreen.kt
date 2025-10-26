@@ -89,7 +89,7 @@ fun MainScreen(
                         shape = MaterialTheme.shapes.large
                     )
                     .statusBarsPadding()
-                    .padding(horizontal = 0.dp, vertical = 10.dp),
+                    .padding( vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchBar(
@@ -100,7 +100,7 @@ fun MainScreen(
                             .fillMaxWidth(1f).requiredHeight(56.dp),
                         onToggleLastUpdate = { isLastUpdateVisible = !isLastUpdateVisible }
                     )
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(8.dp))
                 LastUpdate(updateDate, navController, isVisible = isLastUpdateVisible)
             }
         },
@@ -114,17 +114,13 @@ fun MainScreen(
                     PullToRefreshDefaults.LoadingIndicator(
                         state = pullToRefreshState,
                         isRefreshing = isLoading,
-                        modifier = Modifier.align(Alignment.TopCenter)
+                        modifier = Modifier.align(Alignment.TopCenter).size(64.dp)
                     )
                 }
 
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(start = 12.dp, end = 12.dp)
-                        .fillMaxSize(),
-                ) {
-                    if (filteredProducts.isEmpty() && !isLoading) {
+
+                     if (filteredProducts.isEmpty() && !isLoading) {
                         Column(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.Center,
@@ -148,7 +144,7 @@ fun MainScreen(
                         }
                     } else if (filteredProducts.isNotEmpty()) {
                         LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                             verticalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
                             item {
@@ -172,7 +168,7 @@ fun MainScreen(
 
                         }
                     }
-                }
+
             }
         },
         floatingActionButton = {
@@ -184,7 +180,7 @@ fun MainScreen(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.scan_barcode),
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(42.dp),
                     contentDescription = "Iniciar escáner",
                 )
             }
