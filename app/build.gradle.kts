@@ -96,7 +96,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.5.0-alpha07")
+    implementation("androidx.compose.material3:material3-android:1.5.0-alpha08")
     implementation(libs.androidx.datastore.core.android)
 
     // MLKit Barcode Scanning (bundled)
@@ -135,7 +135,7 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
-    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.5")
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.6")
 
     // Añadir dependencia de desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
