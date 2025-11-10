@@ -17,11 +17,8 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,7 +35,6 @@ import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.IconButtonDefaults.iconButtonVibrantColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -79,52 +75,23 @@ import kotlin.math.roundToInt
 
 private const val SLIDER_MIN_VALUE = 1
 private const val SLIDER_MAX_VALUE = 200
-private const val SLIDER_VISIBLE_RANGE_MAX = 20f // Rango visible del slider (puede ser diferente al min/max real)
+private const val SLIDER_VISIBLE_RANGE_MAX =
+    20f // Rango visible del slider (puede ser diferente al min/max real)
 private const val SLIDER_VISIBLE_STEPS = 19 // Pasos para el rango visible del slider
 
-@Composable
-fun RowScope.ScannerButton(navController: NavController, onQueryChange: (String) -> Unit) {
-    IconButton(
-        modifier = Modifier
-            .align(Alignment.CenterVertically)
-            .size(56.dp),
-
-        onClick = {
-            startScan(navController, onQueryChange)
-        },
-        colors = iconButtonVibrantColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        ),
-        shape = RoundedCornerShape(16.dp),
-    ) {
-        Icon(
-            modifier = Modifier.padding(16.dp).size(56.dp),
-            painter = painterResource(id = R.drawable.scan_barcode),
-            contentDescription = stringResource(R.string.barcode_scanner_cd)
-        )
-    }
-}
 
 @Composable
-fun ColumnScope.LastUpdate(updateDate: String, navController: NavController) {
-    Box(
-        modifier = Modifier
-
-            .background(
-                color = MaterialTheme.colorScheme.surfaceBright,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .clickable { navController.navigate("settings") }
-            .padding(horizontal = 8.dp, vertical = 3.dp)
-            .align(Alignment.CenterHorizontally)
-
+fun LastUpdate(updateDate: String, navController: NavController, isVisible: Boolean = true) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically()
     ) {
         Text(
-            text = stringResource(R.string.last_update_prefix, updateDate ),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(8.dp)).clickable { navController.navigate("settings") }.padding(8.dp, 3.dp),
+            text = stringResource(R.string.last_update_prefix, updateDate),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSecondaryContainer
         )
     }
 }
@@ -274,9 +241,7 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                                 sliderPosition = 1
                                 textValue = ""
                                 onValueChange(1) // Notificar al exterior
-                            }
-
-                            else {
+                            } else {
                                 newValue.toIntOrNull()?.let { intValue ->
                                     if (intValue in 1..500) updateValue(intValue)
                                 }
@@ -372,7 +337,6 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 }
 
 
-
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchBar(
@@ -380,29 +344,34 @@ fun SearchBar(
     navController: NavController,
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onToggleLastUpdate: () -> Unit = {}
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(
-                color = if (query.isNotEmpty())
-                    MaterialTheme.colorScheme.surfaceContainerLowest
-                else
-                    MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(24.dp)
-            ),
-        contentAlignment = Alignment.Center
 
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize().padding(start = 52.dp, end = 0.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        IconButton(
+            onClick = { onToggleLastUpdate() },
+            modifier = Modifier.size(56.dp)
         ) {
-            Box(
-                modifier = Modifier.weight(1f)
-            ) {
+        }
+        Box(
+            modifier = modifier
+                .height(56.dp)
+                .weight(1f)
+
+                .background(
+                    color = if (query.isNotEmpty())
+                        MaterialTheme.colorScheme.surfaceContainerLowest
+                    else
+                        MaterialTheme.colorScheme.background,
+                    shape = RoundedCornerShape(24.dp)
+                ).padding(horizontal = 10.dp),
+            contentAlignment = Alignment.CenterEnd
+
+        ) {
+
                 if (query.isEmpty()) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -421,43 +390,40 @@ fun SearchBar(
                         .fillMaxWidth(),
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Start
                     ),
                     singleLine = true,
                 )
-            }
 
-            Row(verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.height(36.dp)) {
-                if (query.isNotEmpty()) {
-                    IconButton(
-                        modifier = Modifier
-
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceContainer,
-                                shape = RoundedCornerShape(12.dp)
-
-                            ).padding(4.dp)
-                            .size(26.dp),
-                        onClick = { onQueryChange("") }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.add),
-                            contentDescription = stringResource(R.string.clear_search_cd),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.rotate(45f)
-                        )
-                    }
-                }
+            if (query.isNotEmpty()) {
                 IconButton(
-                    onClick = { startScan(navController, onQueryChange) },
-                    modifier = Modifier.size(52.dp, 36.dp)
-                ) {}
+                    modifier = Modifier
+
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceContainer,
+                            shape = RoundedCornerShape(12.dp)
+
+                        ).padding(4.dp)
+                        .size(26.dp),
+                    onClick = { onQueryChange("") }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.add),
+                        contentDescription = stringResource(R.string.clear_search_cd),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.rotate(45f)
+                    )
+                }
             }
+
+
+        }
+            IconButton(
+                onClick = { startScan(navController, onQueryChange) },
+                modifier = Modifier.size(56.dp)
+            ) {}
         }
     }
-}
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -486,11 +452,12 @@ fun ProductCard(
             .clip(
                 when {
                     isFirstItem -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                    isLastItem -> RoundedCornerShape( bottomStart = 16.dp, bottomEnd = 16.dp)
+                    isLastItem -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
                     else -> RoundedCornerShape(0.dp)
                 }
             )
-            .background( color= MaterialTheme.colorScheme.surface
+            .background(
+                color = MaterialTheme.colorScheme.surface
             )
             .wrapContentSize()
             .pointerInput(Unit) {
@@ -540,11 +507,18 @@ fun ProductCard(
                 }
 
                 Text(
-                    modifier = Modifier.background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(16.dp)
-                    ).padding(horizontal = 6.dp, vertical = 3.dp),
-                    text = "$${String.format("%.2f", product.pventa)}", // Mantiene formato dos decimales
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(horizontal = 6.dp, vertical = 3.dp),
+                    text = "$${
+                        String.format(
+                            "%.2f",
+                            product.pventa
+                        )
+                    }", // Mantiene formato dos decimales
                     // Mantenido el peso
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
@@ -562,19 +536,22 @@ fun ProductCard(
                 ) {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth().padding(horizontal = 16.dp),
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
 
                     ) {
-                        PriceText( // SUGGESTION: Composable interno para los textos de precio
+                        PriceText(
+                            // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.cost_label), // SUGGESTION: stringResource
                             value = product.pcosto * multiplier,
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.weight(1f),
                         )
-                        PriceText( // SUGGESTION: Composable interno para los textos de precio
+                        PriceText(
+                            // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.sale_label), // SUGGESTION: stringResource
                             value = product.pventa * multiplier,
                             color = MaterialTheme.colorScheme.onSurface, // Color específico para Venta
@@ -584,7 +561,8 @@ fun ProductCard(
                             fontWeight = FontWeight.Black,
                             modifier = Modifier.weight(1f),
                         )
-                        PriceText( // SUGGESTION: Composable interno para los textos de precio
+                        PriceText(
+                            // SUGGESTION: Composable interno para los textos de precio
                             label = stringResource(R.string.wholesale_label), // SUGGESTION: stringResource
                             value = product.mayoreo * multiplier,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -595,7 +573,9 @@ fun ProductCard(
                     Spacer(modifier = Modifier.height(10.dp))
                     StepsSlider(
                         initialValue = 1,
-                        onValueChange = { multiplier = it } // Actualiza el multiplicador del ProductCard
+                        onValueChange = {
+                            multiplier = it
+                        } // Actualiza el multiplicador del ProductCard
                     )
                 }
             }

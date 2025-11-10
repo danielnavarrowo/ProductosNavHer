@@ -2,7 +2,6 @@
     <string name="app_name">Checador de precios</string>
     <string name="title_activity_main">Checador de precios</string>
     <!-- ScannerButton -->
-    <string name="barcode_scanner_cd">Escanear código de barras</string>
 
     <!-- LastUpdate -->
     <string name="last_update_prefix">Última actualización: %1$s</string>
