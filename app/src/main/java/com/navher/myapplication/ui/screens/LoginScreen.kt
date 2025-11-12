@@ -28,9 +28,9 @@ import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.then
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -78,7 +78,7 @@ fun LoginScreen (authViewModel: AuthViewModel,
         floatingActionButton =
             {
                 if (!otpSent && !isLoading) {
-                    FloatingActionButton(
+                    MediumFloatingActionButton (
                         onClick = {
                             if (isEmailValid) {
                                 authViewModel.sendOTP()
