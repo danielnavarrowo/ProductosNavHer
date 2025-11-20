@@ -21,6 +21,8 @@ android {
 
     defaultConfig {
 
+
+
         val localProperties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
         }
@@ -47,11 +49,11 @@ android {
 
     buildTypes {
         release {
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt")
             )
             signingConfig = signingConfigs.getByName("debug")
         }
@@ -82,6 +84,8 @@ android {
             isUniversalApk = false
         }
     }
+
+
 }
 
 dependencies {
@@ -96,7 +100,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.5.0-alpha08")
+    implementation("androidx.compose.material3:material3-android:1.5.0-alpha09")
     implementation(libs.androidx.datastore.core.android)
 
     // MLKit Barcode Scanning (bundled)
