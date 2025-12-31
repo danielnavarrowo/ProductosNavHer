@@ -103,8 +103,8 @@ dependencies {
     implementation("androidx.compose.material3:material3-android:1.5.0-alpha11")
     implementation(libs.androidx.datastore.core.android)
 
-    // MLKit Barcode Scanning (bundled)
-    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    // MLKit Barcode Scanning (unbundled - uses Google Play Services)
+    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1")
 
     // CameraX
     implementation("androidx.camera:camera-core:1.5.2")
@@ -136,7 +136,7 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.cio)
+    // implementation(libs.ktor.client.cio) // Removed to save size
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
     implementation("io.github.jan-tennert.supabase:auth-kt:3.2.6")
