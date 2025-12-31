@@ -88,7 +88,8 @@ fun LastUpdate(updateDate: String, navController: NavController, isVisible: Bool
         exit = fadeOut() + slideOutVertically()
     ) {
         Text(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(8.dp)).clickable { navController.navigate("settings") }.padding(8.dp, 3.dp),
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(8.dp)).clickable { navController.navigate("settings") }.padding(8.dp, 3.dp),
             text = stringResource(R.string.last_update_prefix, updateDate),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSecondaryContainer

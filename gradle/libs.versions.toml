@@ -1,7 +1,7 @@
 [versions]
-agp = "8.13.1"
+agp = "8.13.2"
 datastorePreferences = "1.2.0"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -10,8 +10,8 @@ appcompat = "1.7.1"
 
 material = "1.13.0"
 
-activityCompose = "1.12.0"
-composeBom = "2025.11.01"
+activityCompose = "1.12.2"
+composeBom = "2025.12.01"
 
 supabase = "3.2.6"
 coilCompose = "2.7.0"
@@ -21,9 +21,9 @@ datastoreCoreAndroid = "1.2.0"
 
 playServicesBase = "18.9.0"
 playServicesTfliteJava = "16.4.0"
-uiTextGoogleFonts = "1.9.5"
+uiTextGoogleFonts = "1.10.0"
 desugarJdkLibs = "2.1.5"
-foundation = "1.9.5"
+foundation = "1.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,7 +33,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.10.2" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version = "3.3.2" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version = "3.3.3" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.10.0" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -50,11 +50,11 @@ coil-compose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
 
 supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabase" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.3.2" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.3.3" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.9.5" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.9.5" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.0" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.10.0" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }

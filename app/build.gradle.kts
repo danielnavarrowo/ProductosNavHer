@@ -33,8 +33,8 @@ android {
         applicationId = "com.navher.productos"
         minSdk = 28
         targetSdk = 36
-        versionCode = 4
-        versionName = "2.0.0"
+        versionCode = 5
+        versionName = "2.0.1"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -100,17 +100,17 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.5.0-alpha09")
+    implementation("androidx.compose.material3:material3-android:1.5.0-alpha11")
     implementation(libs.androidx.datastore.core.android)
 
     // MLKit Barcode Scanning (bundled)
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
     // CameraX
-    implementation("androidx.camera:camera-core:1.5.1")
-    implementation("androidx.camera:camera-camera2:1.5.1")
-    implementation("androidx.camera:camera-lifecycle:1.5.1")
-    implementation("androidx.camera:camera-view:1.5.1")
+    implementation("androidx.camera:camera-core:1.5.2")
+    implementation("androidx.camera:camera-camera2:1.5.2")
+    implementation("androidx.camera:camera-lifecycle:1.5.2")
+    implementation("androidx.camera:camera-view:1.5.2")
 
     // Accompanist Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")

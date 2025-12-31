@@ -101,34 +101,6 @@ class DataService(private val context: Context) {
         }
     }
 
-
-    //Function to check if there is any data in the cache, and return it if it up to date.
-    //If not, it will fetch the data from the API and save it to the cache.
-//    suspend fun getProductsList(): List<Products> {
-//        // Refrescar sesión antes de hacer solicitudes
-//        if (isUserLoggedIn()) {
-//            refreshSession()
-//        }
-//
-//        val cachedProducts = getCachedProductsList()
-//        val cachedDate = getCachedLastUpdate()
-//        if (!isInternetAvailable(context)) {
-//            Toast.makeText(context, "No hay conexión a internet. Mostrando datos almacenados.", Toast.LENGTH_LONG).show()
-//            serverUpdate = cachedDate
-//            return cachedProducts
-//        }
-//        serverUpdate = fetchLastUpdate()
-//        if ( cachedProducts.isNotEmpty()
-//            && serverUpdate <= cachedDate
-//            && cachedDate != LocalDate.parse("1969-12-12")
-//            ) return cachedProducts
-//        else {
-//                val fetchedProducts = fetchProducts()
-//                saveProductsList(fetchedProducts, serverUpdate)
-//                return fetchedProducts
-//            }
-//    }
-
     // Get cached data immediately without checking for updates
     suspend fun getCachedData(): List<Products> {
         return getCachedProductsList()
