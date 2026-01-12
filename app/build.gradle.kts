@@ -4,7 +4,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     kotlin("plugin.serialization")
     alias(libs.plugins.compose.compiler)
 }
@@ -20,9 +19,6 @@ android {
     compileSdk = 36
 
     defaultConfig {
-
-
-
         val localProperties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
         }
@@ -33,8 +29,8 @@ android {
         applicationId = "com.navher.productos"
         minSdk = 28
         targetSdk = 36
-        versionCode = 5
-        versionName = "2.0.1"
+        versionCode = 6
+        versionName = "2.0.2"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -49,7 +45,6 @@ android {
 
     buildTypes {
         release {
-
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -84,8 +79,6 @@ android {
             isUniversalApk = false
         }
     }
-
-
 }
 
 dependencies {
@@ -100,47 +93,37 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    implementation("androidx.compose.material3:material3-android:1.5.0-alpha11")
+    implementation(libs.androidx.compose.material3.android)
     implementation(libs.androidx.datastore.core.android)
 
     // MLKit Barcode Scanning (unbundled - uses Google Play Services)
-    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1")
+    implementation(libs.play.services.mlkit.barcode.scanning)
 
     // CameraX
-    implementation("androidx.camera:camera-core:1.5.2")
-    implementation("androidx.camera:camera-camera2:1.5.2")
-    implementation("androidx.camera:camera-lifecycle:1.5.2")
-    implementation("androidx.camera:camera-view:1.5.2")
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
 
     // Accompanist Permissions
-    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
+    implementation(libs.accompanist.permissions)
 
     implementation(libs.androidx.foundation.android)
     implementation(libs.play.services.base)
     implementation(libs.play.services.tflite.java)
-    implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.compose.foundation)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.android)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
-
-
     implementation(platform(libs.supabase.bom))
     implementation(libs.postgrest.kt)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.android)
-    // implementation(libs.ktor.client.cio) // Removed to save size
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
-    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.6")
-
+    implementation(libs.auth.kt)
     // Añadir dependencia de desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

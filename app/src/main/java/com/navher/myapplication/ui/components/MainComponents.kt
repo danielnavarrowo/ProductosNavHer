@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.navher.myapplication.R
+import com.navher.myapplication.ui.theme.getGoogleSansFlex
 import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.utils.Products
 import kotlinx.coroutines.delay
@@ -248,11 +249,9 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                                 }
                             }
                         },
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        textStyle = MaterialTheme.typography.titleLarge.copy(
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            fontSize = 22.sp,
                             textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Black
                         ),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
@@ -377,7 +376,7 @@ fun SearchBar(
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.search_products_placeholder),
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = MaterialTheme.typography.titleLarge.copy(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         ),
                         textAlign = TextAlign.Center
@@ -500,7 +499,6 @@ fun ProductCard(
                         text = product.descripcion,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 15.sp
                         ),
                         textAlign = TextAlign.Start,
                         maxLines = 2,
@@ -521,8 +519,13 @@ fun ProductCard(
                         )
                     }", // Mantiene formato dos decimales
                     // Mantenido el peso
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = getGoogleSansFlex(
+                            weight = 600,
+                            width = 100f,
+                            grade = 100
+                        )
+                    ),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     maxLines = 1,
                 )
@@ -548,7 +551,13 @@ fun ProductCard(
                             label = stringResource(R.string.cost_label), // SUGGESTION: stringResource
                             value = product.pcosto * multiplier,
                             color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = 20.sp,
+                                fontFamily = getGoogleSansFlex(
+                                    weight = 500,
+                                    width = 80f
+                                )
+                            ),
                             modifier = Modifier.weight(1f),
                         )
                         PriceText(
@@ -557,9 +566,13 @@ fun ProductCard(
                             value = product.pventa * multiplier,
                             color = MaterialTheme.colorScheme.onSurface, // Color específico para Venta
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 22.sp, // Tamaño de fuente más grande
+                                fontSize = 24.sp, // Tamaño de fuente más grande
+                                fontFamily = getGoogleSansFlex(
+                                    weight = 700,
+                                    width = 115f,
+                                    grade = 50
+                                )
                             ), // Estilo específico para Venta
-                            fontWeight = FontWeight.Black,
                             modifier = Modifier.weight(1f),
                         )
                         PriceText(
@@ -567,7 +580,13 @@ fun ProductCard(
                             label = stringResource(R.string.wholesale_label), // SUGGESTION: stringResource
                             value = product.mayoreo * multiplier,
                             color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = 20.sp,
+                                fontFamily = getGoogleSansFlex(
+                                    weight = 500,
+                                    width = 80f
+                                )
+                            ),
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -603,8 +622,13 @@ private fun PriceText(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = color.copy(alpha = .6f),
+            style = MaterialTheme.typography.labelMedium.copy(
+                    fontFamily = getGoogleSansFlex(
+                        weight = 450,
+                        width = 100f,
+                    )
+            ),
+            color = color.copy(alpha = .7f),
             fontWeight = fontWeight,
             textAlign = TextAlign.Center,
 
