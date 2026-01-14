@@ -53,6 +53,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.navher.myapplication.R
+import com.navher.myapplication.ui.theme.getGoogleSansFlex
 import com.navher.myapplication.utils.BarcodeScanner
 import java.util.concurrent.Executors
 import androidx.compose.ui.tooling.preview.Preview as ComposePreview
@@ -258,7 +259,12 @@ fun CameraPreviewScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Apunta la cámara al código de barras",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = getGoogleSansFlex(
+                            weight = 600,
+                            width = 100f,
+                        )
+                    ),
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Thin
@@ -293,15 +299,20 @@ fun PermissionRationaleScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Permiso de cámara requerido",
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = "Se necesita acceso a la cámara para escanear códigos de barras.",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = getGoogleSansFlex(
+                        weight = 400,
+                        width = 90f,
+                    )
+                ),
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
@@ -312,7 +323,12 @@ fun PermissionRationaleScreen(
                 modifier = Modifier.fillMaxWidth().height(64.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
-                Text("Conceder permiso", color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.bodyLarge)
+                Text("Conceder permiso", color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = getGoogleSansFlex(
+                        weight = 600,
+                        width = 100f,
+                    )
+                ),)
             }
             Spacer(modifier = Modifier.height(2.dp))
             Button(
@@ -322,7 +338,12 @@ fun PermissionRationaleScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
                 //border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.errorContainer)
             ) {
-                Text("Cancelar", color = MaterialTheme.colorScheme.onErrorContainer, style = MaterialTheme.typography.bodyLarge)
+                Text("Cancelar", color = MaterialTheme.colorScheme.onErrorContainer,style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = getGoogleSansFlex(
+                        weight = 600,
+                        width = 100f,
+                    )
+                ),)
             }
         }
     }

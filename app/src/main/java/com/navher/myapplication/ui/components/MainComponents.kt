@@ -376,7 +376,7 @@ fun SearchBar(
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.search_products_placeholder),
-                        style = MaterialTheme.typography.titleLarge.copy(
+                        style = MaterialTheme.typography.titleMedium.copy(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         ),
                         textAlign = TextAlign.Center
@@ -552,10 +552,9 @@ fun ProductCard(
                             value = product.pcosto * multiplier,
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 20.sp,
                                 fontFamily = getGoogleSansFlex(
-                                    weight = 500,
-                                    width = 80f
+                                    weight = 600,
+                                    width = 100f,
                                 )
                             ),
                             modifier = Modifier.weight(1f),
@@ -566,10 +565,10 @@ fun ProductCard(
                             value = product.pventa * multiplier,
                             color = MaterialTheme.colorScheme.onSurface, // Color específico para Venta
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 24.sp, // Tamaño de fuente más grande
+                                fontSize = 22.sp, // Tamaño de fuente más grande
                                 fontFamily = getGoogleSansFlex(
-                                    weight = 700,
-                                    width = 115f,
+                                    weight = 800,
+                                    width = 110f,
                                     grade = 50
                                 )
                             ), // Estilo específico para Venta
@@ -581,10 +580,9 @@ fun ProductCard(
                             value = product.mayoreo * multiplier,
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 20.sp,
                                 fontFamily = getGoogleSansFlex(
-                                    weight = 500,
-                                    width = 80f
+                                    weight = 600,
+                                    width = 100f,
                                 )
                             ),
                             modifier = Modifier.weight(1f),

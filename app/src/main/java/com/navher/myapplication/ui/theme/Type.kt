@@ -29,9 +29,9 @@ val googleFlexHeadline = FontFamily(
     Font(
         R.font.googlesansflex,
         variationSettings = FontVariation.Settings(
-            FontVariation.weight(250),      // Bold
+            FontVariation.weight(200),      // Bold
             FontVariation.width(125f),      // Wider
-            FontVariation.slant(-6f),       // Slight slant
+            FontVariation.slant(0f),       // Slight slant
             FontVariation.grade(50)// Higher grade for impact
         )
     )
