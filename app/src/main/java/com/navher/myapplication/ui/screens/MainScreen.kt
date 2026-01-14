@@ -20,7 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumFloatingActionButton
+import androidx.compose.material3.MediumExtendedFloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -43,6 +43,7 @@ import com.navher.myapplication.R
 import com.navher.myapplication.ui.components.LastUpdate
 import com.navher.myapplication.ui.components.ProductCard
 import com.navher.myapplication.ui.components.SearchBar
+import com.navher.myapplication.ui.theme.getGoogleSansFlex
 import com.navher.myapplication.utils.BarcodeScanner.startScan
 import com.navher.myapplication.viewmodels.ProductsViewModel
 
@@ -173,12 +174,19 @@ fun MainScreen(
             }
         },
         floatingActionButton = {
-            MediumFloatingActionButton(
+            MediumExtendedFloatingActionButton (
                 onClick = { startScan(navController, onQueryChange) },
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                modifier = Modifier.navigationBarsPadding().imePadding()
+                modifier = Modifier.navigationBarsPadding().imePadding(),
+
             ) {
+                Text(text = "Escanear", style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = getGoogleSansFlex(
+                        weight = 600,
+                        width = 100f,
+                    )))
+                Spacer(modifier = Modifier.size(12.dp))
                 Icon(
                     painter = painterResource(R.drawable.scan_barcode),
                     modifier = Modifier.size(42.dp),
