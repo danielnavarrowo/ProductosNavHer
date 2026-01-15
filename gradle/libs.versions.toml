@@ -1,6 +1,6 @@
 [versions]
 accompanistPermissions = "0.37.3"
-agp = "8.13.2"
+agp = "9.0.0"
 authKt = "3.3.0"
 cameraCore = "1.5.2"
 datastorePreferences = "1.2.0"
@@ -9,8 +9,8 @@ coreKtx = "1.17.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 activityCompose = "1.12.2"
-composeBom = "2025.12.01"
-material3Android = "1.5.0-alpha11"
+composeBom = "2026.01.00"
+material3Android = "1.5.0-alpha12"
 playServicesMlkitBarcodeScanning = "18.3.1"
 supabase = "3.3.0"
 coilCompose = "2.7.0"
@@ -18,7 +18,7 @@ datastoreCoreAndroid = "1.2.0"
 playServicesBase = "18.10.0"
 playServicesTfliteJava = "16.4.0"
 desugarJdkLibs = "2.1.5"
-foundation = "1.10.0"
+foundation = "1.10.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -49,8 +49,8 @@ supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version
 ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.3.3" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.0" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.10.0" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.1" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.10.1" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
@@ -58,5 +58,4 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
