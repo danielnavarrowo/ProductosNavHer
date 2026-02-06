@@ -181,17 +181,17 @@ fun MainScreen(
                 modifier = Modifier.navigationBarsPadding().imePadding(),
 
             ) {
-                Text(text = "Escanear", style = MaterialTheme.typography.bodyLarge.copy(
-                    fontFamily = getGoogleSansFlex(
-                        weight = 600,
-                        width = 100f,
-                    )))
-                Spacer(modifier = Modifier.size(12.dp))
                 Icon(
                     painter = painterResource(R.drawable.scan_barcode),
                     modifier = Modifier.size(42.dp),
                     contentDescription = "Iniciar escáner",
                 )
+                Spacer(modifier = Modifier.size(12.dp))
+                Text(text = "Escanear", style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = getGoogleSansFlex(
+                        weight = 600,
+                        width = 100f,
+                    )))
             }
         }
     )
