@@ -1,7 +1,7 @@
 [versions]
 accompanistPermissions = "0.37.3"
-agp = "9.1.0-alpha09"
-authKt = "3.3.0"
+agp = "9.1.0"
+authKt = "3.4.1"
 cameraCore = "1.5.3"
 datastorePreferences = "1.2.0"
 kotlin = "2.3.10"
@@ -9,16 +9,16 @@ coreKtx = "1.17.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 activityCompose = "1.12.4"
-composeBom = "2026.02.00"
-material3Android = "1.5.0-alpha14"
+composeBom = "2026.02.01"
+material3Android = "1.5.0-alpha15"
 playServicesMlkitBarcodeScanning = "18.3.1"
-supabase = "3.3.0"
+supabase = "3.4.1"
 coilCompose = "2.7.0"
 datastoreCoreAndroid = "1.2.0"
 playServicesBase = "18.10.0"
 playServicesTfliteJava = "16.4.0"
 desugarJdkLibs = "2.1.5"
-foundation = "1.10.3"
+foundation = "1.10.4"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -46,11 +46,11 @@ coil-compose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.10.0" }
 play-services-mlkit-barcode-scanning = { module = "com.google.android.gms:play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
 supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabase" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.4.0" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.4.1" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.3" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.10.3" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.4" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.10.4" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
