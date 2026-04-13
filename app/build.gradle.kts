@@ -16,7 +16,7 @@ kotlin {
 
 android {
     namespace = "com.navher.myapplication"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         val localProperties = Properties().apply {
@@ -28,7 +28,7 @@ android {
 
         applicationId = "com.navher.productos"
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 6
         versionName = "2.0.2"
 

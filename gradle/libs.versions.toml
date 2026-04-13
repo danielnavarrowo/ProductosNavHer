@@ -1,7 +1,7 @@
 [versions]
 accompanistPermissions = "0.37.3"
-agp = "9.1.0"
-authKt = "3.4.1"
+agp = "9.2.0-rc01"
+authKt = "3.5.0"
 cameraCore = "1.6.0"
 datastorePreferences = "1.2.1"
 kotlin = "2.3.20"
@@ -10,9 +10,9 @@ appcompat = "1.7.1"
 material = "1.13.0"
 activityCompose = "1.13.0"
 composeBom = "2026.03.01"
-material3Android = "1.5.0-alpha16"
+material3Android = "1.5.0-alpha17"
 playServicesMlkitBarcodeScanning = "18.3.1"
-supabase = "3.4.1"
+supabase = "3.5.0"
 coilCompose = "2.7.0"
 datastoreCoreAndroid = "1.2.1"
 playServicesBase = "18.10.0"
@@ -43,10 +43,10 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version = "2.9.7" }
 coil-compose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
-kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.10.0" }
+kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.11.0" }
 play-services-mlkit-barcode-scanning = { module = "com.google.android.gms:play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
 supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabase" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.4.1" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.4.2" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.6" }
