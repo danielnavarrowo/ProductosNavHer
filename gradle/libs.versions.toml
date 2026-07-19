@@ -1,24 +1,24 @@
 [versions]
 accompanistPermissions = "0.37.3"
-agp = "9.2.0-rc01"
-authKt = "3.5.0"
-cameraCore = "1.6.0"
+agp = "9.3.0"
+authKt = "3.6.0"
+cameraCore = "1.6.1"
 datastorePreferences = "1.2.1"
-kotlin = "2.3.20"
-coreKtx = "1.18.0"
+kotlin = "2.4.10"
+coreKtx = "1.19.0"
 appcompat = "1.7.1"
-material = "1.13.0"
+material = "1.14.0"
 activityCompose = "1.13.0"
-composeBom = "2026.03.01"
-material3Android = "1.5.0-alpha17"
+composeBom = "2026.06.01"
+material3Android = "1.5.0-alpha24"
 playServicesMlkitBarcodeScanning = "18.3.1"
-supabase = "3.5.0"
+supabase = "3.6.0"
 coilCompose = "2.7.0"
 datastoreCoreAndroid = "1.2.1"
 playServicesBase = "18.10.0"
-playServicesTfliteJava = "16.4.0"
+playServicesTfliteJava = "16.5.0"
 desugarJdkLibs = "2.1.5"
-foundation = "1.10.6"
+foundation = "1.11.4"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -31,9 +31,9 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "authKt" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.10.2" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.11.0" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.10.0" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.11.0" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -41,16 +41,16 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version = "2.9.7" }
+androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version = "2.9.8" }
 coil-compose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.11.0" }
 play-services-mlkit-barcode-scanning = { module = "com.google.android.gms:play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
 supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabase" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.4.2" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version = "3.5.1" }
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
-androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.10.6" }
-androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.10.6" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version = "1.11.4" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.11.4" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }

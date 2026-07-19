@@ -72,6 +72,7 @@ import com.navher.myapplication.utils.Products
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 
 
 private const val SLIDER_MIN_VALUE = 1
@@ -136,12 +137,12 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                 when (interaction) {
                     is PressInteraction.Press -> {
                         isLongClick = false
-                        delay(viewConfiguration.longPressTimeoutMillis)
+                        delay(viewConfiguration.longPressTimeoutMillis.milliseconds)
                         isLongClick = true
                         while (sliderPosition > 1) {
                             updateValue(sliderPosition - 1)
                             haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
-                            delay(80)
+                            delay(80.milliseconds)
                         }
                     }
 
@@ -164,12 +165,12 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
                 when (interaction) {
                     is PressInteraction.Press -> {
                         isLongClick = false
-                        delay(viewConfiguration.longPressTimeoutMillis)
+                        delay(viewConfiguration.longPressTimeoutMillis.milliseconds)
                         isLongClick = true
                         while (sliderPosition < 500) {
                             updateValue(sliderPosition + 1)
                             haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
-                            delay(80)
+                            delay(80.milliseconds)
                         }
                     }
 
