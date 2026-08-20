@@ -17,7 +17,6 @@ coilCompose = "2.7.0"
 datastoreCoreAndroid = "1.2.1"
 playServicesBase = "18.10.1"
 playServicesTfliteJava = "16.5.0"
-desugarJdkLibs = "2.1.5"
 foundation = "1.12.0"
 
 [libraries]
@@ -53,7 +52,6 @@ androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-andr
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version = "1.12.0" }
 play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 play-services-tflite-java = { group = "com.google.android.gms", name = "play-services-tflite-java", version.ref = "playServicesTfliteJava" }
-desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]

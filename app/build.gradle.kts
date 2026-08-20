@@ -55,9 +55,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_20
-        targetCompatibility = JavaVersion.VERSION_20
-        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
@@ -69,15 +68,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include( "arm64-v8a", "x86_64")
-            isUniversalApk = false
         }
     }
 }
@@ -125,6 +115,4 @@ dependencies {
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.auth.kt)
-    // Añadir dependencia de desugaring
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
