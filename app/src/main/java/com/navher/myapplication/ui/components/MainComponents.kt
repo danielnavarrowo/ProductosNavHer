@@ -30,7 +30,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -100,7 +99,6 @@ fun LastUpdate(updateDate: String, navController: NavController, isVisible: Bool
 }
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
     var sliderPosition by remember {
@@ -338,7 +336,6 @@ fun StepsSlider(initialValue: Int, onValueChange: (Int) -> Unit) {
 }
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchBar(
     query: String,
@@ -427,7 +424,6 @@ fun SearchBar(
     }
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("DefaultLocale") // Mantenido por String.format
 @Composable
 fun ProductCard(
